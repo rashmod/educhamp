@@ -25,10 +25,10 @@ const test = [
     correctAnswerId: '4',
   },
   {
-    id: '7',
-    question: 'What is the square root of 64?',
+    id: '2',
+    question: 'What is the square of 4?',
     image: 'https://via.placeholder.com/150',
-    topic: 'Algebra',
+    topic: 'Geometry',
     options: [
       {
         id: '1',
@@ -50,10 +50,10 @@ const test = [
     correctAnswerId: '4',
   },
   {
-    id: '2',
-    question: 'What is the square of 4?',
+    id: '7',
+    question: 'What is the square root of 64?',
     image: 'https://via.placeholder.com/150',
-    topic: 'Geometry',
+    topic: 'Algebra',
     options: [
       {
         id: '1',

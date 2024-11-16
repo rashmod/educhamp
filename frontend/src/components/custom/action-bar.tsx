@@ -5,14 +5,18 @@ export default function ActionBar({
   className,
   isFirst,
   isLast,
+  canSubmit,
   onNext,
   onPrevious,
+  onSubmit,
 }: {
   className?: string;
   isFirst: boolean;
   isLast: boolean;
+  canSubmit: boolean;
   onNext: () => void;
   onPrevious: () => void;
+  onSubmit: () => void;
 }) {
   return (
     <div
@@ -25,7 +29,7 @@ export default function ActionBar({
         Previous
       </Button>
 
-      <Button variant="default" size="sm">
+      <Button variant="default" size="sm" disabled={!canSubmit} onClick={onSubmit}>
         Submit
       </Button>
 

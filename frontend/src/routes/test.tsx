@@ -18,8 +18,29 @@ export const Route = createFileRoute('/test')({
 const testDuration = 60 * 10;
 
 function RouteComponent() {
+  let score = 0;
+
+  const [submissions, setSubmissions] = useState<{ questionId: string; answerId: string }[]>(
+    test.map(() => ({ questionId: '', answerId: '' }))
+  );
   const [currentQuestion, setCurrentQuestion] = useState(0);
+  const [selectedOption, setSelectedOption] = useState<string | null>(null);
+
   const question = test[currentQuestion];
+
+  function handleSubmit() {
+    if (!selectedOption) return;
+
+    submissions[currentQuestion].questionId = question.id;
+    submissions[currentQuestion].answerId = selectedOption;
+
+    if (question.correctAnswerId === selectedOption) {
+      score++;
+    }
+
+    setSelectedOption(null);
+    handleNextQuestion();
+  }
 
   function handleNextQuestion() {
     if (currentQuestion === test.length - 1) return;
@@ -72,13 +93,17 @@ function RouteComponent() {
             <CardTitle className="font-normal text-lg">Choose an option</CardTitle>
           </CardHeader>
           <CardContent className="flex flex-col gap-2">
-            <RadioGroup>
+            <RadioGroup
+              onValueChange={(e) => setSelectedOption(e)}
+              value={selectedOption || submissions[currentQuestion].answerId}
+            >
               {question.options.map((option) => (
                 <Label
+                  key={option.id}
                   htmlFor={`option-${option.id}`}
                   className="flex items-center gap-4 cursor-pointer border rounded px-4 py-2"
                 >
-                  <RadioGroupItem value={`option-${option.id}`} id={`option-${option.id}`} />
+                  <RadioGroupItem value={option.id} id={`option-${option.id}`} />
                   <div className="text-base">{option.text}</div>
                 </Label>
               ))}
@@ -90,8 +115,10 @@ function RouteComponent() {
       <ActionBar
         isFirst={currentQuestion === 0}
         isLast={currentQuestion === test.length - 1}
+        canSubmit={selectedOption !== null}
         onPrevious={handlePreviousQuestion}
         onNext={handleNextQuestion}
+        onSubmit={handleSubmit}
       />
     </div>
   );
