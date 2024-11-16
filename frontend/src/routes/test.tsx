@@ -1,5 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router';
 
+import ActionBar from '@/components/custom/action-bar';
+import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
@@ -13,7 +15,12 @@ function RouteComponent() {
     <div className="flex flex-col gap-4">
       <Card className="col-span-2 h-min">
         <CardHeader>
-          <CardTitle>Test</CardTitle>
+          <CardTitle className="flex justify-between ">
+            <div className="text-2xl">Test</div>
+            <Button variant="destructive" size="sm">
+              End test
+            </Button>
+          </CardTitle>
           <CardDescription className="flex justify-between">
             <div>Question 1 of 10</div>
             <div>Time left: 1:00</div>
@@ -53,6 +60,8 @@ function RouteComponent() {
           </CardContent>
         </Card>
       </div>
+
+      <ActionBar isFirst isLast />
     </div>
   );
 }
