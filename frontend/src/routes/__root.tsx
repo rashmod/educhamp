@@ -2,6 +2,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Outlet, createRootRoute } from '@tanstack/react-router';
 import React from 'react';
 
+import Navbar from '@/components/custom/navbar';
 import '@/index.css';
 
 const TanStackRouterDevtools =
@@ -20,7 +21,7 @@ export const Route = createRootRoute({
   component: () => (
     <QueryClientProvider client={queryClient}>
       <div className="grid min-h-[100dvh] grid-rows-[auto_1fr]">
-        <div className="container">navbar</div>
+        <Navbar />
         <div className="container mx-auto grid grid-rows-subgrid p-8">
           <Outlet />
         </div>
