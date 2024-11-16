@@ -1,6 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router';
 
 import ActionBar from '@/components/custom/action-bar';
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
@@ -32,6 +33,9 @@ function RouteComponent() {
         <Card>
           <CardHeader>
             <CardTitle className="font-normal text-xl">find x if 2x + 3 = 5</CardTitle>
+            <CardDescription>
+              <Badge>Algebra</Badge>
+            </CardDescription>
           </CardHeader>
           <CardContent className="flex justify-center items-center">
             <img src="https://via.placeholder.com/150" alt="Placeholder" className="w-full" />
