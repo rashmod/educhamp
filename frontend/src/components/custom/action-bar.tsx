@@ -5,10 +5,14 @@ export default function ActionBar({
   className,
   isFirst,
   isLast,
+  onNext,
+  onPrevious,
 }: {
   className?: string;
   isFirst: boolean;
   isLast: boolean;
+  onNext: () => void;
+  onPrevious: () => void;
 }) {
   return (
     <div
@@ -17,7 +21,7 @@ export default function ActionBar({
         className
       )}
     >
-      <Button variant="outline" size="sm" disabled={isFirst}>
+      <Button variant="outline" size="sm" disabled={isFirst} onClick={onPrevious}>
         Previous
       </Button>
 
@@ -25,7 +29,7 @@ export default function ActionBar({
         Submit
       </Button>
 
-      <Button variant="outline" size="sm" disabled={isLast}>
+      <Button variant="outline" size="sm" disabled={isLast} onClick={onNext}>
         Next
       </Button>
     </div>
