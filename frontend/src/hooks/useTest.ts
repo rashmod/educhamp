@@ -52,6 +52,7 @@ export default function useTest<T extends { id: string }>(
   }
 
   function selectOption(answerId: string) {
+    if (Boolean(responses[currentQuestionIdx]?.optionId)) return;
     setSelectedOption(answerId);
   }
 
