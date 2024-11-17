@@ -1,15 +1,12 @@
+import { useQuery } from '@tanstack/react-query';
 import { createFileRoute } from '@tanstack/react-router';
 import { useState } from 'react';
 
 import ActionBar from '@/components/custom/action-bar';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Label } from '@/components/ui/label';
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import TestHeader from '@/components/custom/test-head';
+import TestOptions from '@/components/custom/test-options';
+import TestQuestion from '@/components/custom/test-question';
 import test from '@/data/test';
-import formatDuration from '@/lib/format-duration';
-import { cn } from '@/lib/utils';
 
 export const Route = createFileRoute('/test')({
   component: RouteComponent,
@@ -17,109 +14,89 @@ export const Route = createFileRoute('/test')({
 
 const testDuration = 60 * 10;
 
-function RouteComponent() {
-  let score = 0;
+async function sleep(ms: number) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
 
-  const [submissions, setSubmissions] = useState<{ questionId: string; answerId: string }[]>(
-    test.map(() => ({ questionId: '', answerId: '' }))
-  );
-  const [currentQuestion, setCurrentQuestion] = useState(0);
+async function fetchQuestion(index: number) {
+  await sleep(100);
+  return test[index];
+}
+
+function RouteComponent() {
+  const [responses, setResponses] = useState<{ questionId: string; answerId: string }[]>([]);
+  const [questions, setQuestions] = useState<typeof test>([]);
+
+  const [currentQuestionIdx, setCurrentQuestionIdx] = useState(0);
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
 
-  const question = test[currentQuestion];
+  const { data, isLoading } = useQuery({
+    queryKey: ['test', currentQuestionIdx],
+    queryFn: () => fetchQuestion(currentQuestionIdx),
+  });
+
+  if (data && !questions[currentQuestionIdx]) {
+    setQuestions((prev) => [...prev, data]);
+    setResponses((prev) => [...prev, { questionId: '', answerId: '' }]);
+  }
+
+  const question = questions[currentQuestionIdx];
 
   function handleSubmit() {
-    if (!selectedOption) return;
+    if (!selectedOption || !question || !responses[currentQuestionIdx]) return;
 
-    submissions[currentQuestion].questionId = question.id;
-    submissions[currentQuestion].answerId = selectedOption;
+    responses[currentQuestionIdx].questionId = question.id;
+    responses[currentQuestionIdx].answerId = selectedOption;
 
-    if (question.correctAnswerId === selectedOption) {
-      score++;
-    }
-
-    setSelectedOption(null);
     handleNextQuestion();
   }
 
   function handleNextQuestion() {
-    if (currentQuestion === test.length - 1) return;
-    setCurrentQuestion((prev) => prev + 1);
+    if (currentQuestionIdx === test.length - 1) return;
+    setCurrentQuestionIdx((prev) => prev + 1);
+    setSelectedOption(null);
   }
 
   function handlePreviousQuestion() {
-    if (currentQuestion === 0) return;
-    setCurrentQuestion((prev) => prev - 1);
+    if (currentQuestionIdx === 0) return;
+    setCurrentQuestionIdx((prev) => prev - 1);
+    setSelectedOption(null);
   }
 
   return (
     <div className="flex flex-col gap-4">
-      <Card className="col-span-2 h-min">
-        <CardHeader>
-          <CardTitle className="flex justify-between ">
-            <div className="text-2xl">Test</div>
-            <Button variant="destructive" size="sm">
-              End test
-            </Button>
-          </CardTitle>
-          <CardDescription className="flex items-end justify-between">
-            <div>Question 1 of {test.length}</div>
-            <div>
-              Time left:
-              <span className={cn('ml-2 text-3xl font-mono', { 'text-red-600': testDuration <= 60 })}>
-                {formatDuration(testDuration)}
-              </span>
-            </div>
-          </CardDescription>
-        </CardHeader>
-      </Card>
-
-      <div className="grid grow grid-cols-2 gap-4">
-        <Card>
-          <CardHeader>
-            <CardTitle className="font-normal text-xl">{question.question}</CardTitle>
-            <CardDescription>
-              <Badge>{question.topic}</Badge>
-            </CardDescription>
-          </CardHeader>
-          {question.image && (
-            <CardContent className="flex justify-center items-center">
-              <img src={question.image} alt="Placeholder" className="w-full" />
-            </CardContent>
-          )}
-        </Card>
-        <Card>
-          <CardHeader>
-            <CardTitle className="font-normal text-lg">Choose an option</CardTitle>
-          </CardHeader>
-          <CardContent className="flex flex-col gap-2">
-            <RadioGroup
-              onValueChange={(e) => setSelectedOption(e)}
-              value={selectedOption || submissions[currentQuestion].answerId}
-            >
-              {question.options.map((option) => (
-                <Label
-                  key={option.id}
-                  htmlFor={`option-${option.id}`}
-                  className="flex items-center gap-4 cursor-pointer border rounded px-4 py-2"
-                >
-                  <RadioGroupItem value={option.id} id={`option-${option.id}`} />
-                  <div className="text-base">{option.text}</div>
-                </Label>
-              ))}
-            </RadioGroup>
-          </CardContent>
-        </Card>
-      </div>
-
-      <ActionBar
-        isFirst={currentQuestion === 0}
-        isLast={currentQuestion === test.length - 1}
-        canSubmit={selectedOption !== null}
-        onPrevious={handlePreviousQuestion}
-        onNext={handleNextQuestion}
-        onSubmit={handleSubmit}
+      <TestHeader
+        title="Test"
+        timeLeft={testDuration}
+        currentQuestion={currentQuestionIdx + 1}
+        totalQuestions={test.length}
+        endTest={() => {}}
       />
+
+      {isLoading && <div className="text-center text-2xl grid h-full place-items-center bg-red-100">Loading...</div>}
+
+      {data && question && responses[currentQuestionIdx] && (
+        <>
+          <div className="grid grow grid-cols-2 gap-4">
+            <TestQuestion question={question.question} topic={question.topic} image={question.image} />
+
+            <TestOptions
+              options={question.options}
+              selectedOption={selectedOption || responses[currentQuestionIdx].answerId}
+              setSelectedOption={setSelectedOption}
+            />
+          </div>
+
+          <ActionBar
+            isFirst={currentQuestionIdx === 0}
+            isLast={currentQuestionIdx === test.length - 1}
+            canSubmit={selectedOption !== null}
+            onPrevious={handlePreviousQuestion}
+            onNext={handleNextQuestion}
+            onSubmit={handleSubmit}
+          />
+        </>
+      )}
     </div>
   );
 }

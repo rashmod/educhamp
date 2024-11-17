@@ -82,18 +82,22 @@ const test = [
       {
         id: '1',
         text: '8',
+        image: 'https://via.placeholder.com/150',
       },
       {
         id: '2',
         text: '16',
+        image: 'https://via.placeholder.com/150',
       },
       {
         id: '3',
         text: '32',
+        image: 'https://via.placeholder.com/150',
       },
       {
         id: '4',
         text: '64',
+        image: 'https://via.placeholder.com/150',
       },
     ],
     correctAnswerId: '4',
