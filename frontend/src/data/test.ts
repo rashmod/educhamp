@@ -23,6 +23,7 @@ const test = [
       },
     ],
     correctAnswerId: '4',
+    selectedAnswerId: '4',
   },
   {
     id: '2',
@@ -48,6 +49,7 @@ const test = [
       },
     ],
     correctAnswerId: '4',
+    selectedAnswerId: '3',
   },
   {
     id: '7',
@@ -73,6 +75,7 @@ const test = [
       },
     ],
     correctAnswerId: '4',
+    selectedAnswerId: '1',
   },
   {
     id: '3',
@@ -101,6 +104,7 @@ const test = [
       },
     ],
     correctAnswerId: '4',
+    selectedAnswerId: null,
   },
 ];
 

@@ -14,6 +14,7 @@ import { Route as rootRoute } from './routes/__root'
 import { Route as IndexImport } from './routes/index'
 import { Route as TestIndexImport } from './routes/test/index'
 import { Route as TestWarningImport } from './routes/test/warning'
+import { Route as TestReportTestIdImport } from './routes/test/report.$testId'
 
 // Create/Update Routes
 
@@ -32,6 +33,12 @@ const TestIndexRoute = TestIndexImport.update({
 const TestWarningRoute = TestWarningImport.update({
   id: '/test/warning',
   path: '/test/warning',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const TestReportTestIdRoute = TestReportTestIdImport.update({
+  id: '/test/report/$testId',
+  path: '/test/report/$testId',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -60,6 +67,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TestIndexImport
       parentRoute: typeof rootRoute
     }
+    '/test/report/$testId': {
+      id: '/test/report/$testId'
+      path: '/test/report/$testId'
+      fullPath: '/test/report/$testId'
+      preLoaderRoute: typeof TestReportTestIdImport
+      parentRoute: typeof rootRoute
+    }
   }
 }
 
@@ -69,12 +83,14 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/test/warning': typeof TestWarningRoute
   '/test': typeof TestIndexRoute
+  '/test/report/$testId': typeof TestReportTestIdRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/test/warning': typeof TestWarningRoute
   '/test': typeof TestIndexRoute
+  '/test/report/$testId': typeof TestReportTestIdRoute
 }
 
 export interface FileRoutesById {
@@ -82,14 +98,15 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/test/warning': typeof TestWarningRoute
   '/test/': typeof TestIndexRoute
+  '/test/report/$testId': typeof TestReportTestIdRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/test/warning' | '/test'
+  fullPaths: '/' | '/test/warning' | '/test' | '/test/report/$testId'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/test/warning' | '/test'
-  id: '__root__' | '/' | '/test/warning' | '/test/'
+  to: '/' | '/test/warning' | '/test' | '/test/report/$testId'
+  id: '__root__' | '/' | '/test/warning' | '/test/' | '/test/report/$testId'
   fileRoutesById: FileRoutesById
 }
 
@@ -97,12 +114,14 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   TestWarningRoute: typeof TestWarningRoute
   TestIndexRoute: typeof TestIndexRoute
+  TestReportTestIdRoute: typeof TestReportTestIdRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   TestWarningRoute: TestWarningRoute,
   TestIndexRoute: TestIndexRoute,
+  TestReportTestIdRoute: TestReportTestIdRoute,
 }
 
 export const routeTree = rootRoute
@@ -117,7 +136,8 @@ export const routeTree = rootRoute
       "children": [
         "/",
         "/test/warning",
-        "/test/"
+        "/test/",
+        "/test/report/$testId"
       ]
     },
     "/": {
@@ -128,6 +148,9 @@ export const routeTree = rootRoute
     },
     "/test/": {
       "filePath": "test/index.tsx"
+    },
+    "/test/report/$testId": {
+      "filePath": "test/report.$testId.tsx"
     }
   }
 }
