@@ -33,6 +33,7 @@ function RouteComponent() {
     isFirst,
     isLast,
     canSubmit,
+    canGoToNext,
     selectOption,
     handleSubmit,
     handleNextQuestion,
@@ -60,9 +61,9 @@ function RouteComponent() {
           </div>
 
           <ActionBar
-            isFirst={isFirst}
-            isLast={isLast}
-            canSubmit={canSubmit}
+            disablePrevious={isFirst}
+            disableNext={isLast || !canGoToNext}
+            disableSubmit={!canSubmit}
             onPrevious={handlePreviousQuestion}
             onNext={handleNextQuestion}
             onSubmit={handleSubmit}

@@ -27,6 +27,8 @@ export default function useTest<T extends { id: string }>(
 
   const isFirst = currentQuestionIdx === 0;
   const isLast = currentQuestionIdx === maxQuestions - 1;
+  const canSubmit = selectedOption !== null;
+  const canGoToNext = Boolean(responses[currentQuestionIdx]?.optionId);
 
   function handleSubmit() {
     if (!selectedOption || !question || !responses[currentQuestionIdx]) return;
@@ -61,7 +63,8 @@ export default function useTest<T extends { id: string }>(
     isLoading,
     isFirst,
     isLast,
-    canSubmit: selectedOption !== null,
+    canSubmit,
+    canGoToNext,
 
     selectOption,
     handleSubmit,

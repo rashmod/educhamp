@@ -3,17 +3,17 @@ import { cn } from '@/lib/utils';
 
 export default function ActionBar({
   className,
-  isFirst,
-  isLast,
-  canSubmit,
+  disablePrevious,
+  disableNext,
+  disableSubmit,
   onNext,
   onPrevious,
   onSubmit,
 }: {
   className?: string;
-  isFirst: boolean;
-  isLast: boolean;
-  canSubmit: boolean;
+  disablePrevious: boolean;
+  disableNext: boolean;
+  disableSubmit: boolean;
   onNext: () => void;
   onPrevious: () => void;
   onSubmit: () => void;
@@ -25,15 +25,15 @@ export default function ActionBar({
         className
       )}
     >
-      <Button variant="outline" size="sm" disabled={isFirst} onClick={onPrevious}>
+      <Button variant="outline" size="sm" disabled={disablePrevious} onClick={onPrevious}>
         Previous
       </Button>
 
-      <Button variant="default" size="sm" disabled={!canSubmit} onClick={onSubmit}>
+      <Button variant="default" size="sm" disabled={disableSubmit} onClick={onSubmit}>
         Submit
       </Button>
 
-      <Button variant="outline" size="sm" disabled={isLast} onClick={onNext}>
+      <Button variant="outline" size="sm" disabled={disableNext} onClick={onNext}>
         Next
       </Button>
     </div>
