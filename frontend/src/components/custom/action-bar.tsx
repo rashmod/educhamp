@@ -21,7 +21,7 @@ export default function ActionBar({
   return (
     <div
       className={cn(
-        'sticky grid grid-cols-3 gap-8 mx-auto bottom-5 z-50 justify-self-center rounded-md border px-10 py-3 shadow-lg bg-background',
+        'sticky bottom-5 z-50 mx-auto grid grid-cols-3 gap-8 justify-self-center rounded-md border bg-background px-10 py-3 shadow-lg',
         className
       )}
     >

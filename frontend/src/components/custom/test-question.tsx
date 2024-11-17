@@ -5,13 +5,13 @@ export default function TestQuestion({ question, topic, image }: { question: str
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="font-normal text-xl">{question}</CardTitle>
+        <CardTitle className="text-xl font-normal">{question}</CardTitle>
         <CardDescription>
           <Badge>{topic}</Badge>
         </CardDescription>
       </CardHeader>
       {image && (
-        <CardContent className="flex justify-center flex-col gap-1">
+        <CardContent className="flex flex-col justify-center gap-1">
           <p className="text-sm text-muted-foreground">Refer to the image</p>
           <img src={image} alt="Question Image" className="w-full" />
         </CardContent>

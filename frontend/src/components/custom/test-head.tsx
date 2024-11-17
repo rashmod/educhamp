@@ -19,7 +19,7 @@ export default function TestHeader({
   return (
     <Card className="col-span-2 h-min">
       <CardHeader>
-        <CardTitle className="flex justify-between ">
+        <CardTitle className="flex justify-between">
           <div className="text-2xl">{title}</div>
           <Button variant="destructive" size="sm" onClick={endTest}>
             End test
@@ -31,7 +31,7 @@ export default function TestHeader({
           </div>
           <div>
             Time left:
-            <span className={cn('ml-2 text-3xl font-mono', { 'text-red-600': timeLeft <= 60 })}>
+            <span className={cn('ml-2 font-mono text-3xl', { 'text-red-600': timeLeft <= 60 })}>
               {formatDuration(timeLeft)}
             </span>
           </div>

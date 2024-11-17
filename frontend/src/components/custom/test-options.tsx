@@ -15,7 +15,7 @@ export default function TestOptions({
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="font-normal text-lg">Choose an option</CardTitle>
+        <CardTitle className="text-lg font-normal">Choose an option</CardTitle>
       </CardHeader>
       <CardContent className="flex flex-col gap-2">
         <RadioGroup onValueChange={(e) => setSelectedOption(e)} value={selectedOption}>
@@ -23,7 +23,7 @@ export default function TestOptions({
             <Label
               key={option.id}
               htmlFor={`option-${option.id}`}
-              className={cn('flex items-center gap-4 cursor-pointer border rounded-md px-4 py-2', {
+              className={cn('flex cursor-pointer items-center gap-4 rounded-md border px-4 py-2', {
                 outline: selectedOption === option.id,
               })}
             >
