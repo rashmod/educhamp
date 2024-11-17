@@ -10,7 +10,7 @@ function RouteComponent() {
   return (
     <div>
       <h1 className="text-center text-3xl font-bold">Hello, Bhushan!</h1>
-      <Link to="/test">
+      <Link to="/test/warning">
         <Button>Start a new test</Button>
       </Link>
     </div>

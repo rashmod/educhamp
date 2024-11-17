@@ -8,7 +8,7 @@ import test from '@/data/test';
 import useTest from '@/hooks/useTest';
 import useTimer from '@/hooks/useTimer';
 
-export const Route = createFileRoute('/test')({
+export const Route = createFileRoute('/test/')({
   component: RouteComponent,
 });
 
