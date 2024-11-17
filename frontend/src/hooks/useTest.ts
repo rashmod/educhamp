@@ -56,6 +56,10 @@ export default function useTest<T extends { id: string }>(
     setSelectedOption(answerId);
   }
 
+  function endTest() {
+    alert('test ended');
+  }
+
   return {
     question,
     questionIdx: currentQuestionIdx,
@@ -71,5 +75,6 @@ export default function useTest<T extends { id: string }>(
     handleSubmit,
     handleNextQuestion,
     handlePreviousQuestion,
+    endTest,
   };
 }

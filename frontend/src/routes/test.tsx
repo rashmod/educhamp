@@ -6,6 +6,7 @@ import TestOptions from '@/components/custom/test-options';
 import TestQuestion from '@/components/custom/test-question';
 import test from '@/data/test';
 import useTest from '@/hooks/useTest';
+import useTimer from '@/hooks/useTimer';
 
 export const Route = createFileRoute('/test')({
   component: RouteComponent,
@@ -38,19 +39,22 @@ function RouteComponent() {
     handleSubmit,
     handleNextQuestion,
     handlePreviousQuestion,
+    endTest,
   } = useTest(fetchQuestion, maxQuestions);
+
+  const timeLeft = useTimer(testDuration, endTest);
 
   return (
     <div className="flex flex-col gap-4">
       <TestHeader
         title="Test"
-        timeLeft={testDuration}
+        timeLeft={timeLeft}
         currentQuestion={questionIdx + 1}
         totalQuestions={maxQuestions}
-        endTest={() => {}}
+        endTest={endTest}
       />
 
-      {isLoading && <div className="text-center text-2xl grid h-full place-items-center bg-red-100">Loading...</div>}
+      {isLoading && <div className="grid h-full place-items-center bg-red-100 text-center text-2xl">Loading...</div>}
 
       {question && (
         <>
