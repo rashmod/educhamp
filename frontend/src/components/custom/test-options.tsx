@@ -10,7 +10,7 @@ export default function TestOptions({
 }: {
   options: { id: string; text: string; image?: string }[];
   selectedOption: string;
-  setSelectedOption: (option: string) => void;
+  setSelectedOption: (optionId: string) => void;
 }) {
   return (
     <Card>
