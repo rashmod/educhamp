@@ -1,10 +1,10 @@
 import { createFileRoute } from '@tanstack/react-router';
 
+import { endTestApi, startTestApi, submitAnswerApi } from '@/api/test';
 import ActionBar from '@/components/custom/action-bar';
 import TestHeader from '@/components/custom/test-head';
 import TestOptions from '@/components/custom/test-options';
 import TestQuestion from '@/components/custom/test-question';
-import test from '@/data/test';
 import useTest from '@/hooks/useTest';
 import useTimer from '@/hooks/useTimer';
 
@@ -14,16 +14,8 @@ export const Route = createFileRoute('/test/')({
 
 const testDuration = 60 * 10;
 
-async function sleep(ms: number) {
-  return new Promise((resolve) => setTimeout(resolve, ms));
-}
-
-async function fetchQuestion(index: number) {
-  await sleep(100);
-  return test[index % test.length]!;
-}
-
 function RouteComponent() {
+  // get the max questions from the backend
   const maxQuestions = 4;
 
   const {
@@ -40,7 +32,12 @@ function RouteComponent() {
     handleNextQuestion,
     handlePreviousQuestion,
     endTest,
-  } = useTest(fetchQuestion, maxQuestions);
+  } = useTest({
+    maxQuestions,
+    startTestApi: () => startTestApi('67419665614314f4845e645b', 8),
+    submitAnswerApi,
+    endTestApi,
+  });
 
   const timeLeft = useTimer(testDuration, endTest);
 
