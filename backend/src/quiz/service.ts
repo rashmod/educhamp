@@ -71,14 +71,26 @@ export default class Service {
     const delta = 1;
     const { lowerBound, upperBound } = calculateBounds({ difficulty: averageDifficulty, efficiency, delta });
 
-    const possibleQuestions = await this.repository.getQuestions({
+    let possibleQuestions = await this.repository.getQuestions({
       grade,
       lowerBound,
       upperBound,
       excludedIds: questions.map((question) => question._id.toString()),
     });
 
+    if (possibleQuestions.length === 0) {
+      possibleQuestions = await this.repository.getQuestions({
+        grade,
+        excludedIds: questions.map((question) => question._id.toString()),
+      });
+    }
+
+    if (possibleQuestions.length === 0) {
+      possibleQuestions = await this.repository.getQuestions({ grade });
+    }
+
     const randomQuestion = chooseRandom(possibleQuestions);
+
     return randomQuestion;
   }
 
