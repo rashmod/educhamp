@@ -8,7 +8,7 @@ export default function useTest<T extends { _id: string }>({
 }: {
   startTestApi: () => Promise<{ quizId: string; maxQuestions: number; maxTime: number; question: T }>;
   submitAnswerApi: (testId: string, questionId: string, optionId: string) => Promise<T>;
-  endTestApi: (quizId: string) => Promise<void>;
+  endTestApi: (quizId: string) => Promise<null>;
 }) {
   const [testId, setTestId] = useState<string | null>(null);
   const hasStarted = useRef(false);

@@ -32,9 +32,9 @@ function RouteComponent() {
     handlePreviousQuestion,
     endTest,
   } = useTest({
-    startTestApi: () => startTestApi('67419665614314f4845e645b', 7),
-    submitAnswerApi,
-    endTestApi,
+    startTestApi: () => startTestApi('67419665614314f4845e645b', 7).then((res) => res.data),
+    submitAnswerApi: (...args: Parameters<typeof submitAnswerApi>) => submitAnswerApi(...args).then((res) => res.data),
+    endTestApi: (...args: Parameters<typeof endTestApi>) => endTestApi(...args).then((res) => res.data),
   });
 
   const timeLeft = useTimer(maxTime, () => endTest({}), !isStarting);
