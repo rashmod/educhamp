@@ -1,7 +1,7 @@
 import { Types } from 'mongoose';
 
-import calculateBounds from '@/quiz/lib/calculateBounds';
-import chooseRandom from '@/quiz/lib/chooseRandom';
+import calculateBounds from '@/quiz/lib/calculate-bounds';
+import chooseRandom from '@/quiz/lib/choose-random';
 import Repository from '@/quiz/repository';
 
 export default class Service {
