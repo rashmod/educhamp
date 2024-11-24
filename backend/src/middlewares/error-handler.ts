@@ -6,7 +6,7 @@ import AppError from '@/errors/app-error';
 import ApiResponse from '@/http/api-response';
 import handleApiResponse from '@/http/handle-api-response';
 
-export default function errorHandlerMiddleware(error: Error, _req: Request, res: Response, _next: NextFunction) {
+export default function errorHandler(error: Error, _req: Request, res: Response, _next: NextFunction) {
   console.info('Responding with error response');
   console.error('In Error handler middleware.\n', error);
 
