@@ -1,6 +1,9 @@
 import express from 'express';
+import { StatusCodes } from 'http-status-codes';
 import { Types } from 'mongoose';
 
+import ApiResponse from '@/http/api-response';
+import handleApiResponse from '@/http/handle-api-response';
 import Service from '@/quiz/service';
 
 export default class Controller {
@@ -13,7 +16,12 @@ export default class Controller {
 
     const quiz = await this.service.createQuiz({ userId, grade, maxTime, maxQuestions });
 
-    res.status(200).json({ ...quiz, maxQuestions, maxTime });
+    const response = ApiResponse.success({
+      data: { ...quiz, maxQuestions, maxTime },
+      message: 'Quiz started',
+      statusCode: StatusCodes.OK,
+    });
+    handleApiResponse(res, response);
   };
 
   submitAnswer = async (req: express.Request, res: express.Response) => {
@@ -23,7 +31,12 @@ export default class Controller {
     const nextQuestion = await this.service.getNextQuestion(quizId);
     await this.service.addQuestionToQuiz(quizId, (nextQuestion._id as Types.ObjectId).toString());
 
-    res.status(200).json(nextQuestion);
+    const response = ApiResponse.success({
+      data: nextQuestion,
+      message: 'Question submitted',
+      statusCode: StatusCodes.OK,
+    });
+    handleApiResponse(res, response);
   };
 
   endTest = async (req: express.Request, res: express.Response) => {
@@ -31,6 +44,11 @@ export default class Controller {
 
     await this.service.endQuiz(quizId);
 
-    res.status(200).json({});
+    const response = ApiResponse.success({
+      data: null,
+      message: 'Test ended',
+      statusCode: StatusCodes.OK,
+    });
+    handleApiResponse(res, response);
   };
 }

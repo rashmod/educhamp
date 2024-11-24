@@ -1,5 +1,6 @@
 import { Types } from 'mongoose';
 
+import ErrorFactory from '@/errors';
 import calculateBounds from '@/quiz/lib/calculate-bounds';
 import chooseRandom from '@/quiz/lib/choose-random';
 import Repository from '@/quiz/repository';
@@ -50,7 +51,7 @@ export default class Service {
 
     const questionIndex = quiz.questions.findIndex((ques) => ques._id.toString() === questionId);
     if (questionIndex === -1) {
-      throw new Error('Question not found');
+      throw ErrorFactory.notFoundError('Question not found');
     }
 
     const isOptionCorrect = optionId === question.correctAnswerId;
@@ -97,7 +98,7 @@ export default class Service {
   async getQuizById(quizId: string) {
     const quiz = await this.repository.getQuizById(quizId);
     if (!quiz) {
-      throw new Error('Quiz not found');
+      throw ErrorFactory.notFoundError('Quiz not found');
     }
     return quiz;
   }
@@ -105,7 +106,7 @@ export default class Service {
   async getQuestionById(questionId: string) {
     const question = await this.repository.getQuestionById(questionId);
     if (!question) {
-      throw new Error('Question not found');
+      throw ErrorFactory.notFoundError('Question not found');
     }
     return question;
   }
