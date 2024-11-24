@@ -62,6 +62,8 @@ type Quiz = {
   marksObtained: number;
   completed: boolean;
   grade: number;
+  createdAt: string;
+  updatedAt: string;
 };
 
 type QuizWithQuestions = Omit<Quiz, 'questions'> & { questions: { question: Question; optionId?: string }[] };

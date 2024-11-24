@@ -10,8 +10,8 @@ export const Route = createFileRoute('/test/warning')({
 });
 
 function RouteComponent() {
-  const maxQuestions = 4;
-  const testDuration = 60 * 10;
+  const maxQuestions = 20;
+  const testDuration = 60 * 20;
   const instructions = getInstructions(maxQuestions, testDuration);
 
   return (
