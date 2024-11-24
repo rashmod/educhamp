@@ -1,4 +1,4 @@
-import { createFileRoute } from '@tanstack/react-router';
+import { createFileRoute, useRouter } from '@tanstack/react-router';
 
 import { endTestApi, startTestApi, submitAnswerApi } from '@/api/test';
 import ActionBar from '@/components/custom/action-bar';
@@ -16,6 +16,7 @@ function RouteComponent() {
   const {
     maxTime,
     maxQuestions,
+    testId,
     question,
     questionIdx,
     option,
@@ -36,7 +37,9 @@ function RouteComponent() {
     endTestApi,
   });
 
-  const timeLeft = useTimer(maxTime, endTest, !isStarting);
+  const timeLeft = useTimer(maxTime, () => endTest({}), !isStarting);
+
+  const { navigate } = useRouter();
 
   return (
     <div className="flex flex-col gap-4">
@@ -45,7 +48,15 @@ function RouteComponent() {
         timeLeft={timeLeft}
         currentQuestion={questionIdx + 1}
         totalQuestions={maxQuestions}
-        endTest={endTest}
+        endTest={() => {
+          endTest({
+            onSuccess: () =>
+              navigate({
+                to: '/test/report/$testId',
+                params: { testId: testId! },
+              }),
+          });
+        }}
       />
 
       {isLoading && <div className="grid h-full place-items-center bg-red-100 text-center text-2xl">Loading...</div>}

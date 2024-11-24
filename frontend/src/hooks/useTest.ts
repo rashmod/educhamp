@@ -85,6 +85,7 @@ export default function useTest<T extends { _id: string }>({
   return {
     maxQuestions: startData?.maxQuestions,
     maxTime: startData?.maxTime,
+    testId,
 
     question,
     questionIdx: currentQuestionIdx,
@@ -101,6 +102,8 @@ export default function useTest<T extends { _id: string }>({
     handleSubmit,
     handleNextQuestion,
     handlePreviousQuestion,
-    endTest: () => endTest(testId!),
+    endTest: ({ onSuccess }: { onSuccess?: () => Promise<void> | void }) => {
+      endTest(testId!, { onSuccess });
+    },
   };
 }
