@@ -13,7 +13,7 @@ export default class Controller {
 
     const quiz = await this.service.createQuiz({ userId, grade, maxTime, maxQuestions });
 
-    res.status(200).json(quiz);
+    res.status(200).json({ ...quiz, maxQuestions, maxTime });
   };
 
   submitAnswer = async (req: express.Request, res: express.Response) => {
