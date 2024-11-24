@@ -47,7 +47,7 @@ export default function useTest<T extends { _id: string }>({
 
   const isFirst = currentQuestionIdx === 0;
   const isLast = currentQuestionIdx === startData?.maxQuestions! - 1;
-  const canSubmit = selectedOption !== null;
+  const canSubmit = selectedOption !== null && responses[currentQuestionIdx]?.optionId === '';
   const canGoToNext = Boolean(responses[currentQuestionIdx]?.optionId);
 
   function handleSubmit() {
