@@ -12,8 +12,8 @@ export default function TestHeader({
 }: {
   title: string;
   currentQuestion: number;
-  totalQuestions: number;
-  timeLeft: number;
+  totalQuestions: number | undefined;
+  timeLeft: number | undefined;
   endTest: () => void;
 }) {
   return (
@@ -26,15 +26,24 @@ export default function TestHeader({
           </Button>
         </CardTitle>
         <CardDescription className="flex items-end justify-between">
-          <div>
-            Question {currentQuestion} of {totalQuestions}
-          </div>
-          <div>
-            Time left:
-            <span className={cn('ml-2 font-mono text-3xl', { 'text-red-600': timeLeft <= 60 })}>
-              {formatDuration(timeLeft)}
-            </span>
-          </div>
+          {totalQuestions ? (
+            <div>
+              Question {currentQuestion} of {totalQuestions}
+            </div>
+          ) : (
+            <div>Fetching questions</div>
+          )}
+
+          {timeLeft ? (
+            <div>
+              Time left:
+              <span className={cn('ml-2 font-mono text-3xl', { 'text-red-600': timeLeft <= 60 })}>
+                {formatDuration(timeLeft)}
+              </span>
+            </div>
+          ) : (
+            <div>Fetching time left</div>
+          )}
         </CardDescription>
       </CardHeader>
     </Card>

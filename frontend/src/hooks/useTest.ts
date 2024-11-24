@@ -5,12 +5,10 @@ export default function useTest<T extends { _id: string }>({
   startTestApi,
   submitAnswerApi,
   endTestApi,
-  maxQuestions = 20,
 }: {
-  startTestApi: () => Promise<{ quizId: string; question: T }>;
+  startTestApi: () => Promise<{ quizId: string; maxQuestions: number; maxTime: number; question: T }>;
   submitAnswerApi: (testId: string, questionId: string, optionId: string) => Promise<T>;
   endTestApi: (quizId: string) => Promise<void>;
-  maxQuestions?: number;
 }) {
   const [testId, setTestId] = useState<string | null>(null);
   const hasStarted = useRef(false);
@@ -24,6 +22,7 @@ export default function useTest<T extends { _id: string }>({
   const { data: startData, isLoading: isStarting } = useQuery({
     queryKey: ['start-test'],
     queryFn: () => startTestApi(),
+    enabled: !testId,
   });
 
   const { mutate: submitQuestion, isPending: isSubmitting } = useMutation({
@@ -47,7 +46,7 @@ export default function useTest<T extends { _id: string }>({
   const option = selectedOption || responses[currentQuestionIdx]?.optionId || '';
 
   const isFirst = currentQuestionIdx === 0;
-  const isLast = currentQuestionIdx === maxQuestions - 1;
+  const isLast = currentQuestionIdx === startData?.maxQuestions! - 1;
   const canSubmit = selectedOption !== null;
   const canGoToNext = Boolean(responses[currentQuestionIdx]?.optionId);
 
@@ -84,10 +83,14 @@ export default function useTest<T extends { _id: string }>({
   }
 
   return {
+    maxQuestions: startData?.maxQuestions,
+    maxTime: startData?.maxTime,
+
     question,
     questionIdx: currentQuestionIdx,
     option,
 
+    isStarting,
     isLoading: isStarting || isSubmitting || isEnding,
     isFirst,
     isLast,

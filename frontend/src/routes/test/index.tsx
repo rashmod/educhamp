@@ -12,16 +12,14 @@ export const Route = createFileRoute('/test/')({
   component: RouteComponent,
 });
 
-const testDuration = 60 * 10;
-
 function RouteComponent() {
-  // get the max questions from the backend
-  const maxQuestions = 4;
-
   const {
+    maxTime,
+    maxQuestions,
     question,
     questionIdx,
     option,
+    isStarting,
     isLoading,
     isFirst,
     isLast,
@@ -33,13 +31,12 @@ function RouteComponent() {
     handlePreviousQuestion,
     endTest,
   } = useTest({
-    maxQuestions,
-    startTestApi: () => startTestApi('67419665614314f4845e645b', 8),
+    startTestApi: () => startTestApi('67419665614314f4845e645b', 7),
     submitAnswerApi,
     endTestApi,
   });
 
-  const timeLeft = useTimer(testDuration, endTest);
+  const timeLeft = useTimer(maxTime, endTest, !isStarting);
 
   return (
     <div className="flex flex-col gap-4">
