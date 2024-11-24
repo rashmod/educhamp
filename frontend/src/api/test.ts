@@ -34,6 +34,12 @@ export async function endTestApi(testId: string): Promise<SuccessResponse<null>>
   return response.data;
 }
 
+export async function getReportApi(testId: string): Promise<SuccessResponse<QuizWithQuestions>> {
+  const response = await axios.get(`http://localhost:3000/api/quiz/${testId}/report`);
+
+  return response.data;
+}
+
 type Question = {
   _id: string;
   question: string;
@@ -46,6 +52,19 @@ type Question = {
   difficulty: number;
   grade: number;
 };
+
+type Quiz = {
+  userId: string;
+  questions: { _id: string; optionId?: string }[];
+  maxQuestions: number;
+  maxTime: number;
+  maxMarks: number;
+  marksObtained: number;
+  completed: boolean;
+  grade: number;
+};
+
+type QuizWithQuestions = Omit<Quiz, 'questions'> & { questions: { question: Question; optionId?: string }[] };
 
 type SuccessResponse<T> = {
   success: true;
