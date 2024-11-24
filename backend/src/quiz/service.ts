@@ -95,7 +95,26 @@ export default class Service {
     return randomQuestion;
   }
 
-  async getQuizById(quizId: string) {
+  async getReport(quizId: string) {
+    const quiz = await this.getQuizById(quizId);
+    console.log(quiz);
+    if (!quiz.completed) {
+      throw ErrorFactory.notFoundError('Quiz not completed');
+    }
+
+    const quizWithQuestions = (await this.repository.getPopulatedQuiz(quizId))!;
+    const report = [];
+
+    for (const question of quizWithQuestions.questions) {
+      const { optionId, _id } = question;
+
+      report.push({ question: _id, optionId });
+    }
+
+    return { ...quizWithQuestions, questions: report };
+  }
+
+  private async getQuizById(quizId: string) {
     const quiz = await this.repository.getQuizById(quizId);
     if (!quiz) {
       throw ErrorFactory.notFoundError('Quiz not found');
@@ -103,7 +122,7 @@ export default class Service {
     return quiz;
   }
 
-  async getQuestionById(questionId: string) {
+  private async getQuestionById(questionId: string) {
     const question = await this.repository.getQuestionById(questionId);
     if (!question) {
       throw ErrorFactory.notFoundError('Question not found');

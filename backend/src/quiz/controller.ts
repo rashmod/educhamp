@@ -51,4 +51,17 @@ export default class Controller {
     });
     handleApiResponse(res, response);
   };
+
+  getReport = async (req: express.Request<{ quizId: string }>, res: express.Response) => {
+    const { quizId }: { quizId: string } = req.params;
+
+    const report = await this.service.getReport(quizId);
+
+    const response = ApiResponse.success({
+      data: report,
+      message: 'Report fetched',
+      statusCode: StatusCodes.OK,
+    });
+    handleApiResponse(res, response);
+  };
 }

@@ -41,6 +41,10 @@ export default class Repository {
     return Question.find({ _id: { $nin: ids }, grade, difficulty: { $gte: lowerBound, $lte: upperBound } });
   }
 
+  async getPopulatedQuiz(quizId: string) {
+    return Quiz.findById(quizId).populate('questions._id').lean();
+  }
+
   async saveQuiz(quiz: IQuiz) {
     await quiz.save();
   }
