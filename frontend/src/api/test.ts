@@ -40,6 +40,12 @@ export async function getReportApi(testId: string): Promise<SuccessResponse<Quiz
   return response.data;
 }
 
+export async function getUserTestsApi(userId: string): Promise<SuccessResponse<QuizSummary[]>> {
+  const response = await axios.get(`http://localhost:3000/api/quiz/user/${userId}`);
+
+  return response.data;
+}
+
 type Question = {
   _id: string;
   question: string;
@@ -67,6 +73,14 @@ type Quiz = {
 };
 
 type QuizWithQuestions = Omit<Quiz, 'questions'> & { questions: { question: Question; optionId?: string }[] };
+
+type QuizSummary = {
+  _id: string;
+  grade: number;
+  score: number;
+  maxMarks: number;
+  createdAt: string;
+};
 
 type SuccessResponse<T> = {
   success: true;
