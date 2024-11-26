@@ -45,6 +45,10 @@ export default class Repository {
     return Quiz.findById(quizId).populate('questions._id').lean();
   }
 
+  async getUserQuizzes(userId: string) {
+    return Quiz.find({ userId, completed: true }).populate('questions._id').lean();
+  }
+
   async saveQuiz(quiz: IQuiz) {
     await quiz.save();
   }

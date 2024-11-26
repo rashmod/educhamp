@@ -9,6 +9,8 @@ export interface IQuiz extends Document {
   marksObtained: number;
   completed: boolean;
   grade: number;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 const QuizSchema = new Schema<IQuiz>(

@@ -17,6 +17,8 @@ router.post('/submit-answer', asyncHandler(controller.submitAnswer));
 
 router.post('/end', asyncHandler(controller.endTest));
 
+router.get('/user/:userId', asyncHandler(controller.getUserQuizzes));
+
 router.get('/:quizId/report', asyncHandler(controller.getReport));
 
 export default router;

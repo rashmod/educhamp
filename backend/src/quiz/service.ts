@@ -5,6 +5,8 @@ import calculateBounds from '@/quiz/lib/calculate-bounds';
 import chooseRandom from '@/quiz/lib/choose-random';
 import Repository from '@/quiz/repository';
 
+import { IQuestion } from './schema/question';
+
 export default class Service {
   constructor(private readonly repository: Repository) {}
 
@@ -97,7 +99,6 @@ export default class Service {
 
   async getReport(quizId: string) {
     const quiz = await this.getQuizById(quizId);
-    console.log(quiz);
     if (!quiz.completed) {
       throw ErrorFactory.notFoundError('Quiz not completed');
     }
@@ -128,5 +129,29 @@ export default class Service {
       throw ErrorFactory.notFoundError('Question not found');
     }
     return question;
+  }
+
+  async getUserQuizzes(userId: string) {
+    const quizzes = await this.repository.getUserQuizzes(userId);
+
+    const res = [];
+
+    for (const quiz of quizzes) {
+      // @ts-ignore
+      const { _id, grade, questions, maxMarks, createdAt } = quiz;
+
+      const score = questions.reduce((acc, question) => {
+        const ques = question._id as unknown as IQuestion;
+        const optionId = question.optionId;
+
+        if (!optionId) return acc;
+        else if (ques.correctAnswerId === optionId) return acc + ques.difficulty;
+        else return acc;
+      }, 0);
+
+      res.push({ _id, grade, score, maxMarks, createdAt });
+    }
+
+    return res;
   }
 }

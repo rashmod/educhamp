@@ -1,6 +1,6 @@
 import { Document, Schema, model } from 'mongoose';
 
-interface IQuestion extends Document {
+export interface IQuestion extends Document {
   question: string;
   image?: string;
   options: {

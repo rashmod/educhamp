@@ -64,4 +64,17 @@ export default class Controller {
     });
     handleApiResponse(res, response);
   };
+
+  getUserQuizzes = async (req: express.Request<{ userId: string }>, res: express.Response) => {
+    const { userId }: { userId: string } = req.params;
+
+    const quizzes = await this.service.getUserQuizzes(userId);
+
+    const response = ApiResponse.success({
+      data: quizzes,
+      message: 'Quizzes fetched',
+      statusCode: StatusCodes.OK,
+    });
+    handleApiResponse(res, response);
+  };
 }
