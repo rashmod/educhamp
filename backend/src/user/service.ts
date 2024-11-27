@@ -11,4 +11,14 @@ export default class Service {
 
     return user;
   }
+
+  async login({ email, password }: { email: string; password: string }) {
+    const user = await this.repository.findByEmail(email);
+
+    if (!user) throw ErrorFactory.notFoundError('User not found');
+
+    if (user.password !== password) throw ErrorFactory.unauthorizedError('Invalid password');
+
+    return user;
+  }
 }

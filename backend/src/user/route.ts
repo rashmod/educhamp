@@ -12,5 +12,6 @@ const service = new Service(repository);
 const controller = new Controller(service);
 
 router.post('/register', asyncHandler(controller.register));
+router.post('/login', asyncHandler(controller.login));
 
 export default router;

@@ -20,4 +20,17 @@ export default class Controller {
     });
     handleApiResponse(res, response);
   };
+
+  login = async (req: express.Request, res: express.Response) => {
+    const { email, password }: { email: string; password: string } = req.body;
+
+    const user = await this.service.login({ email, password });
+
+    const response = ApiResponse.success({
+      data: user,
+      message: 'User logged in successfully',
+      statusCode: StatusCodes.OK,
+    });
+    handleApiResponse(res, response);
+  };
 }
