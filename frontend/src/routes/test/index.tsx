@@ -5,8 +5,8 @@ import ActionBar from '@/components/custom/action-bar';
 import TestHeader from '@/components/custom/test-head';
 import TestOptions from '@/components/custom/test-options';
 import TestQuestion from '@/components/custom/test-question';
-import useTest from '@/hooks/useTest';
-import useTimer from '@/hooks/useTimer';
+import useTest from '@/hooks/use-test';
+import useTimer from '@/hooks/use-timer';
 
 export const Route = createFileRoute('/test/')({
   component: RouteComponent,

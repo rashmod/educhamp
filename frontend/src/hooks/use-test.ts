@@ -103,6 +103,7 @@ export default function useTest<T extends { _id: string }>({
     handleNextQuestion,
     handlePreviousQuestion,
     endTest: ({ onSuccess }: { onSuccess?: () => Promise<void> | void }) => {
+      console.log('ending test', testId);
       endTest(testId!, { onSuccess });
     },
   };
