@@ -15,5 +15,6 @@ const controller = new Controller(service, authService);
 
 router.post('/register', asyncHandler(controller.register));
 router.post('/login', asyncHandler(controller.login));
+router.post('/logout', asyncHandler(controller.logout));
 
 export default router;

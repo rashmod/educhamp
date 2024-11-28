@@ -41,4 +41,15 @@ export default class Controller {
     this.authService.setRefreshCookie(res, refreshToken, 'default');
     handleApiResponse(res, response);
   };
+
+  logout = async (_req: express.Request, res: express.Response) => {
+    const response = ApiResponse.success({
+      data: null,
+      message: 'User Logged Out',
+      statusCode: StatusCodes.NO_CONTENT,
+    });
+
+    this.authService.setRefreshCookie(res, '', 'now');
+    handleApiResponse(res, response);
+  };
 }
