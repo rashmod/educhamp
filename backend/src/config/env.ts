@@ -9,6 +9,8 @@ const schema = z.object({
   PORT: z.coerce.number().int().positive(),
   NODE_ENV: z.enum(['development', 'production', 'test']),
   DB_URI: z.string().trim().min(1),
+  JWT_REFRESH_SECRET: z.string().trim().min(1),
+  JWT_ACCESS_SECRET: z.string().trim().min(1),
 });
 
 const parsedEnv = schema.safeParse(process.env);
