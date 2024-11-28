@@ -4,7 +4,7 @@ import { Link, createFileRoute } from '@tanstack/react-router';
 import { getUserTestsApi } from '@/api/test';
 import { Button } from '@/components/ui/button';
 
-export const Route = createFileRoute('/')({
+export const Route = createFileRoute('/_auth/')({
   component: RouteComponent,
 });
 

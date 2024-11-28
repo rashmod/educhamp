@@ -11,16 +11,30 @@
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
-import { Route as IndexImport } from './routes/index'
+import { Route as RegisterImport } from './routes/register'
+import { Route as LoginImport } from './routes/login'
+import { Route as AuthImport } from './routes/_auth'
 import { Route as TestIndexImport } from './routes/test/index'
+import { Route as AuthIndexImport } from './routes/_auth/index'
 import { Route as TestWarningImport } from './routes/test/warning'
 import { Route as TestReportTestIdImport } from './routes/test/report.$testId'
 
 // Create/Update Routes
 
-const IndexRoute = IndexImport.update({
-  id: '/',
-  path: '/',
+const RegisterRoute = RegisterImport.update({
+  id: '/register',
+  path: '/register',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const LoginRoute = LoginImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const AuthRoute = AuthImport.update({
+  id: '/_auth',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -28,6 +42,12 @@ const TestIndexRoute = TestIndexImport.update({
   id: '/test/',
   path: '/test/',
   getParentRoute: () => rootRoute,
+} as any)
+
+const AuthIndexRoute = AuthIndexImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AuthRoute,
 } as any)
 
 const TestWarningRoute = TestWarningImport.update({
@@ -46,11 +66,25 @@ const TestReportTestIdRoute = TestReportTestIdImport.update({
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexImport
+    '/_auth': {
+      id: '/_auth'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof AuthImport
+      parentRoute: typeof rootRoute
+    }
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginImport
+      parentRoute: typeof rootRoute
+    }
+    '/register': {
+      id: '/register'
+      path: '/register'
+      fullPath: '/register'
+      preLoaderRoute: typeof RegisterImport
       parentRoute: typeof rootRoute
     }
     '/test/warning': {
@@ -59,6 +93,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/test/warning'
       preLoaderRoute: typeof TestWarningImport
       parentRoute: typeof rootRoute
+    }
+    '/_auth/': {
+      id: '/_auth/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof AuthIndexImport
+      parentRoute: typeof AuthImport
     }
     '/test/': {
       id: '/test/'
@@ -79,46 +120,89 @@ declare module '@tanstack/react-router' {
 
 // Create and export the route tree
 
+interface AuthRouteChildren {
+  AuthIndexRoute: typeof AuthIndexRoute
+}
+
+const AuthRouteChildren: AuthRouteChildren = {
+  AuthIndexRoute: AuthIndexRoute,
+}
+
+const AuthRouteWithChildren = AuthRoute._addFileChildren(AuthRouteChildren)
+
 export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
+  '': typeof AuthRouteWithChildren
+  '/login': typeof LoginRoute
+  '/register': typeof RegisterRoute
   '/test/warning': typeof TestWarningRoute
+  '/': typeof AuthIndexRoute
   '/test': typeof TestIndexRoute
   '/test/report/$testId': typeof TestReportTestIdRoute
 }
 
 export interface FileRoutesByTo {
-  '/': typeof IndexRoute
+  '/login': typeof LoginRoute
+  '/register': typeof RegisterRoute
   '/test/warning': typeof TestWarningRoute
+  '/': typeof AuthIndexRoute
   '/test': typeof TestIndexRoute
   '/test/report/$testId': typeof TestReportTestIdRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
-  '/': typeof IndexRoute
+  '/_auth': typeof AuthRouteWithChildren
+  '/login': typeof LoginRoute
+  '/register': typeof RegisterRoute
   '/test/warning': typeof TestWarningRoute
+  '/_auth/': typeof AuthIndexRoute
   '/test/': typeof TestIndexRoute
   '/test/report/$testId': typeof TestReportTestIdRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/test/warning' | '/test' | '/test/report/$testId'
+  fullPaths:
+    | ''
+    | '/login'
+    | '/register'
+    | '/test/warning'
+    | '/'
+    | '/test'
+    | '/test/report/$testId'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/test/warning' | '/test' | '/test/report/$testId'
-  id: '__root__' | '/' | '/test/warning' | '/test/' | '/test/report/$testId'
+  to:
+    | '/login'
+    | '/register'
+    | '/test/warning'
+    | '/'
+    | '/test'
+    | '/test/report/$testId'
+  id:
+    | '__root__'
+    | '/_auth'
+    | '/login'
+    | '/register'
+    | '/test/warning'
+    | '/_auth/'
+    | '/test/'
+    | '/test/report/$testId'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
+  AuthRoute: typeof AuthRouteWithChildren
+  LoginRoute: typeof LoginRoute
+  RegisterRoute: typeof RegisterRoute
   TestWarningRoute: typeof TestWarningRoute
   TestIndexRoute: typeof TestIndexRoute
   TestReportTestIdRoute: typeof TestReportTestIdRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
-  IndexRoute: IndexRoute,
+  AuthRoute: AuthRouteWithChildren,
+  LoginRoute: LoginRoute,
+  RegisterRoute: RegisterRoute,
   TestWarningRoute: TestWarningRoute,
   TestIndexRoute: TestIndexRoute,
   TestReportTestIdRoute: TestReportTestIdRoute,
@@ -134,17 +218,32 @@ export const routeTree = rootRoute
     "__root__": {
       "filePath": "__root.tsx",
       "children": [
-        "/",
+        "/_auth",
+        "/login",
+        "/register",
         "/test/warning",
         "/test/",
         "/test/report/$testId"
       ]
     },
-    "/": {
-      "filePath": "index.tsx"
+    "/_auth": {
+      "filePath": "_auth.tsx",
+      "children": [
+        "/_auth/"
+      ]
+    },
+    "/login": {
+      "filePath": "login.tsx"
+    },
+    "/register": {
+      "filePath": "register.tsx"
     },
     "/test/warning": {
       "filePath": "test/warning.tsx"
+    },
+    "/_auth/": {
+      "filePath": "_auth/index.tsx",
+      "parent": "/_auth"
     },
     "/test/": {
       "filePath": "test/index.tsx"

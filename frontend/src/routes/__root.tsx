@@ -1,8 +1,9 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { Outlet, createRootRoute } from '@tanstack/react-router';
+import { Outlet, createRootRouteWithContext } from '@tanstack/react-router';
 import React from 'react';
 
 import Navbar from '@/components/custom/navbar';
+import AuthContext from '@/contexts/auth/auth-context';
 import '@/index.css';
 
 const TanStackRouterDevtools =
@@ -17,7 +18,7 @@ const TanStackQueryDevtools =
 
 const queryClient = new QueryClient();
 
-export const Route = createRootRoute({
+export const Route = createRootRouteWithContext<RouterContext>()({
   component: () => (
     <QueryClientProvider client={queryClient}>
       <div className="grid min-h-[100dvh] grid-rows-[auto_1fr]">
@@ -32,3 +33,7 @@ export const Route = createRootRoute({
     </QueryClientProvider>
   ),
 });
+
+type RouterContext = {
+  auth: AuthContext;
+};
