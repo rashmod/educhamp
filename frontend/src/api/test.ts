@@ -1,5 +1,7 @@
 import axios from 'axios';
 
+import { SuccessResponse } from '@/types';
+
 export async function startTestApi(
   userId: string,
   grade: number
@@ -80,18 +82,4 @@ type QuizSummary = {
   score: number;
   maxMarks: number;
   createdAt: string;
-};
-
-type SuccessResponse<T> = {
-  success: true;
-  message: string;
-  data: T;
-  statusCode: number;
-};
-
-type ErrorResponse<T> = {
-  success: false;
-  message: string;
-  error: T;
-  statusCode: number;
 };
