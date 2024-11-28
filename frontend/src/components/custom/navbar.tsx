@@ -22,6 +22,16 @@ export default function Navbar() {
               Home
             </Button>
           </Link>
+          <Link to="/login" className="[&.active>*]:font-bold">
+            <Button variant="link" size="sm">
+              Login
+            </Button>
+          </Link>
+          <Link to="/register" className="[&.active>*]:font-bold">
+            <Button variant="link" size="sm">
+              Register
+            </Button>
+          </Link>
         </div>
       </div>
     </div>
