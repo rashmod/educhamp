@@ -11,7 +11,7 @@ const router = express.Router();
 const authService = new AuthService();
 const repository = new Repository();
 const service = new Service(repository, authService);
-const controller = new Controller(service);
+const controller = new Controller(service, authService);
 
 router.post('/register', asyncHandler(controller.register));
 router.post('/login', asyncHandler(controller.login));

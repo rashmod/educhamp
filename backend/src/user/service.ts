@@ -14,7 +14,9 @@ export default class Service {
 
     if (!user) throw ErrorFactory.internalServerError('User not created');
 
-    return user;
+    const { accessToken, refreshToken } = this.authService.generateTokens({ _id: user._id, email: user.email });
+
+    return { user, accessToken, refreshToken };
   }
 
   async login({ email, password }: { email: string; password: string }) {
@@ -26,6 +28,8 @@ export default class Service {
 
     if (!isValidPassword) throw ErrorFactory.unauthorizedError('Invalid password or email');
 
-    return user;
+    const { accessToken, refreshToken } = this.authService.generateTokens({ _id: user._id, email: user.email });
+
+    return { user, accessToken, refreshToken };
   }
 }
