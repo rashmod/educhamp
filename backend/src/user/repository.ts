@@ -8,4 +8,8 @@ export default class Respository {
   async findByEmail(email: string) {
     return User.findOne({ email });
   }
+
+  async findById(id: string) {
+    return User.findById(id);
+  }
 }

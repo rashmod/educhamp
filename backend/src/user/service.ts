@@ -2,7 +2,7 @@ import AuthService from '@/auth/service';
 import ErrorFactory from '@/errors';
 import Repository from '@/user/repository';
 
-export default class Service {
+export default class UserService {
   constructor(
     private readonly repository: Repository,
     private readonly authService: AuthService
@@ -31,5 +31,24 @@ export default class Service {
     const { accessToken, refreshToken } = this.authService.generateTokens({ _id: user._id, email: user.email });
 
     return { user, accessToken, refreshToken };
+  }
+
+  async refreshToken(token: string) {
+    const { _id, email } = this.authService.verifyToken(token, 'refresh') as { _id?: string; email?: string };
+
+    if (!_id || !email) throw ErrorFactory.unauthorizedError('Invalid token');
+
+    await this.findById(_id);
+
+    const { accessToken, refreshToken } = this.authService.generateTokens({ _id, email });
+
+    return { accessToken, refreshToken, _id };
+  }
+
+  async findById(id: string) {
+    const user = await this.repository.findById(id);
+    if (!user) throw ErrorFactory.notFoundError('User not found');
+
+    return user;
   }
 }

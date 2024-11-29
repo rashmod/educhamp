@@ -2,20 +2,21 @@ import express from 'express';
 import { StatusCodes } from 'http-status-codes';
 
 import AuthService from '@/auth/service';
+import ErrorFactory from '@/errors';
 import ApiResponse from '@/http/api-response';
 import handleApiResponse from '@/http/handle-api-response';
-import Service from '@/user/service';
+import UserService from '@/user/service';
 
 export default class Controller {
   constructor(
-    private readonly service: Service,
+    private readonly userService: UserService,
     private readonly authService: AuthService
   ) {}
 
   register = async (req: express.Request, res: express.Response) => {
     const { name, email, password }: { name: string; email: string; password: string } = req.body;
 
-    const { user, accessToken, refreshToken } = await this.service.register({ name, email, password });
+    const { user, accessToken, refreshToken } = await this.userService.register({ name, email, password });
 
     const response = ApiResponse.success({
       data: { user, accessToken },
@@ -30,7 +31,7 @@ export default class Controller {
   login = async (req: express.Request, res: express.Response) => {
     const { email, password }: { email: string; password: string } = req.body;
 
-    const { user, accessToken, refreshToken } = await this.service.login({ email, password });
+    const { user, accessToken, refreshToken } = await this.userService.login({ email, password });
 
     const response = ApiResponse.success({
       data: { user, accessToken },
@@ -50,6 +51,25 @@ export default class Controller {
     });
 
     this.authService.setRefreshCookie(res, '', 'now');
+    handleApiResponse(res, response);
+  };
+
+  refreshToken = async (req: express.Request, res: express.Response) => {
+    const token: string | undefined = req.cookies?.refreshToken;
+
+    if (!token) {
+      throw ErrorFactory.badRequestError('Refresh Token not found');
+    }
+
+    const { accessToken, refreshToken, _id } = await this.userService.refreshToken(token);
+
+    this.authService.setRefreshCookie(res, refreshToken, 'default');
+
+    const response = ApiResponse.success({
+      data: { accessToken, userId: _id },
+      message: 'Token refreshed successfully',
+      statusCode: StatusCodes.OK,
+    });
     handleApiResponse(res, response);
   };
 }
