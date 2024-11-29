@@ -4,7 +4,9 @@ import React from 'react';
 
 import Navbar from '@/components/custom/navbar';
 import AuthContext from '@/contexts/auth/auth-context';
+import useAuth from '@/contexts/auth/use-auth';
 import '@/index.css';
+import { setupAxiosInterceptor } from '@/lib/setup-axios-interceptor';
 
 const TanStackRouterDevtools =
   process.env.NODE_ENV === 'production'
@@ -19,7 +21,17 @@ const TanStackQueryDevtools =
 const queryClient = new QueryClient();
 
 export const Route = createRootRouteWithContext<RouterContext>()({
-  component: () => (
+  component: RootComponent,
+});
+
+function RootComponent() {
+  const {
+    session: { setAccessToken },
+  } = useAuth();
+
+  setupAxiosInterceptor(setAccessToken);
+
+  return (
     <QueryClientProvider client={queryClient}>
       <div className="grid min-h-[100dvh] grid-rows-[auto_1fr]">
         <Navbar />
@@ -31,8 +43,8 @@ export const Route = createRootRouteWithContext<RouterContext>()({
       <TanStackRouterDevtools initialIsOpen={false} />
       <TanStackQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>
-  ),
-});
+  );
+}
 
 type RouterContext = {
   auth: AuthContext;
