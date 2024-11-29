@@ -12,6 +12,7 @@ type AuthContext = {
     isAuthenticated: boolean;
     isLoading: boolean;
     user: User | null;
+    changeGrade: (grade: number) => void;
     setAccessToken: React.Dispatch<React.SetStateAction<string | null>>;
   };
 };

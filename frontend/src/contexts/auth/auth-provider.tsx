@@ -35,6 +35,7 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
           isAuthenticated: Boolean(accessToken),
           isLoading,
           user,
+          changeGrade: (grade: number) => setUser((prev) => (prev ? { ...prev, grade } : null)),
           setAccessToken,
         },
       }}

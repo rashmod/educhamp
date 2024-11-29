@@ -5,6 +5,7 @@ import ActionBar from '@/components/custom/action-bar';
 import TestHeader from '@/components/custom/test-head';
 import TestOptions from '@/components/custom/test-options';
 import TestQuestion from '@/components/custom/test-question';
+import useAuth from '@/contexts/auth/use-auth';
 import useTest from '@/hooks/use-test';
 import useTimer from '@/hooks/use-timer';
 
@@ -13,6 +14,10 @@ export const Route = createFileRoute('/test/')({
 });
 
 function RouteComponent() {
+  const {
+    session: { user },
+  } = useAuth();
+
   const {
     maxTime,
     maxQuestions,
@@ -32,7 +37,7 @@ function RouteComponent() {
     handlePreviousQuestion,
     endTest,
   } = useTest({
-    startTestApi: () => startTestApi('67419665614314f4845e645b', 7).then((res) => res.data),
+    startTestApi: () => startTestApi(user!._id, user!.grade).then((res) => res.data),
     submitAnswerApi: (...args: Parameters<typeof submitAnswerApi>) => submitAnswerApi(...args).then((res) => res.data),
     endTestApi: (...args: Parameters<typeof endTestApi>) => endTestApi(...args).then((res) => res.data),
   });

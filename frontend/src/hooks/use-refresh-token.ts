@@ -15,10 +15,10 @@ export default function useRefreshToken({
     onSuccess: ({ data }) => {
       setAccessToken(data.accessToken);
       const {
-        user: { name, _id, email, grade },
+        user: { name, _id, email },
       } = data;
 
-      setUser({ name, _id, email, grade });
+      setUser((prev) => ({ name, _id, email, grade: prev?.grade || 7 }));
     },
   });
 }
