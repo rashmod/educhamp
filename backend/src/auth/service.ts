@@ -32,6 +32,7 @@ export default class AuthService {
   setRefreshCookie(res: Response, refreshToken: string, expires: 'now' | 'default') {
     const cookieOptions: CookieOptions = {
       httpOnly: true,
+      secure: env.NODE_ENV === 'production',
       path: '/api/user/refresh-token',
       maxAge: expires === 'now' ? 0 : 7 * 24 * 60 * 60 * 1000,
     };
