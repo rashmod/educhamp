@@ -2,12 +2,15 @@ import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 
 import AuthProvider from '@/contexts/auth/auth-provider';
-import Router from '@/providers/router';
+import QueryClientProvider from '@/providers/query-client';
+import RouterProvider from '@/providers/router';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <AuthProvider>
-      <Router />
-    </AuthProvider>
+    <QueryClientProvider>
+      <AuthProvider>
+        <RouterProvider />
+      </AuthProvider>
+    </QueryClientProvider>
   </StrictMode>
 );
