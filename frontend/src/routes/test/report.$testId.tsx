@@ -123,7 +123,7 @@ function RouteComponent() {
         {data.data.questions.map(({ question, optionId }, index) => (
           <Card key={index}>
             <CardHeader className="grid grid-cols-2 gap-4">
-              <TestQuestion question={question.question} topic={question.topic} image={question.image} />
+              <TestQuestion question={question.question} topic={''} image={question.image} />
               <TestOptions
                 options={question.options}
                 selectedOption={optionId ?? ''}

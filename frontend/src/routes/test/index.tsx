@@ -69,7 +69,7 @@ function RouteComponent() {
       {question && (
         <>
           <div className="grid grow grid-cols-2 gap-4">
-            <TestQuestion question={question.question} topic={question.topic} image={question.image} />
+            <TestQuestion question={question.question} topic={''} image={question.image} />
 
             <TestOptions options={question.options} selectedOption={option} setSelectedOption={selectOption} />
           </div>

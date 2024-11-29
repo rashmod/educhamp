@@ -1,6 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
 import { Link, createFileRoute } from '@tanstack/react-router';
-import { useState } from 'react';
 
 import { getUserTestsApi } from '@/api/test';
 import { Button } from '@/components/ui/button';
