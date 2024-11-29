@@ -2,6 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import { Link, createFileRoute } from '@tanstack/react-router';
 
 import { getUserTestsApi } from '@/api/test';
+import Loading from '@/components/custom/loading';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import useAuth from '@/contexts/auth/use-auth';
@@ -17,23 +18,29 @@ function RouteComponent() {
 
   const { data, isLoading } = useQuery({
     queryKey: ['dashboard'],
-    queryFn: () => getUserTestsApi(user!._id),
+    queryFn: () => getUserTestsApi(user?._id || ''),
   });
 
-  if (isLoading) return <div>Loading...</div>;
-  if (!data) return <div>Error</div>;
+  if (isLoading)
+    return (
+      <div className="grid h-screen place-items-center bg-primary text-9xl text-primary-foreground">
+        <Loading />
+      </div>
+    );
+
+  if (!data || !user) return <div>Error</div>;
 
   return (
     <div>
       <div className="grid place-items-center gap-4">
-        <h1 className="text-center text-3xl font-bold">Hello, {user?.name}!</h1>
+        <h1 className="text-center text-3xl font-bold">Hello, {user.name}!</h1>
         <div className="flex w-4/5 justify-between gap-4">
           <Link to="/test/warning">
             <Button>Start a new test</Button>
           </Link>
           <div className="flex items-center gap-2">
             <p>Select your grade</p>
-            <Select value={user!.grade.toString()} onValueChange={(value) => changeGrade(+value)}>
+            <Select value={user.grade.toString()} onValueChange={(value) => changeGrade(+value)}>
               <SelectTrigger className="w-[100px]">
                 <SelectValue placeholder="Grade" />
               </SelectTrigger>

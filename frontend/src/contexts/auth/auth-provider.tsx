@@ -15,7 +15,7 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
 
   const register = useRegister({ setAccessToken, setUser });
   const login = useLogin({ setAccessToken, setUser });
-  const logout = useLogout();
+  const logout = useLogout({ setAccessToken, setUser });
   const { mutate: refreshToken, isPending: refreshTokenLoading } = useRefreshToken({ setAccessToken, setUser });
 
   useEffect(() => {
