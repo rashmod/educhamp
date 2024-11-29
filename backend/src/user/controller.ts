@@ -61,12 +61,12 @@ export default class UserController {
       throw ErrorFactory.badRequestError('Refresh Token not found');
     }
 
-    const { accessToken, refreshToken, _id } = await this.userService.refreshToken(token);
+    const { accessToken, refreshToken, user } = await this.userService.refreshToken(token);
 
     this.authService.setRefreshCookie(res, refreshToken, 'default');
 
     const response = ApiResponse.success({
-      data: { accessToken, userId: _id },
+      data: { accessToken, user },
       message: 'Token refreshed successfully',
       statusCode: StatusCodes.OK,
     });

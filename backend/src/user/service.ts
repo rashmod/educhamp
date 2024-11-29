@@ -38,11 +38,11 @@ export default class UserService {
 
     if (!_id || !email) throw ErrorFactory.unauthorizedError('Invalid token');
 
-    await this.findById(_id);
+    const user = await this.findById(_id);
 
     const { accessToken, refreshToken } = this.authService.generateTokens({ _id, email });
 
-    return { accessToken, refreshToken, _id };
+    return { accessToken, refreshToken, user };
   }
 
   async findById(id: string) {
