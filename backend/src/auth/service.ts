@@ -33,7 +33,7 @@ export default class AuthService {
     const cookieOptions: CookieOptions = {
       httpOnly: true,
       secure: env.NODE_ENV === 'production',
-      path: '/api/users/refresh-token',
+      path: '/api/user/refresh-token',
       maxAge: expires === 'now' ? 0 : 7 * 24 * 60 * 60 * 1000,
     };
 
