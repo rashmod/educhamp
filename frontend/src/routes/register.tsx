@@ -1,6 +1,7 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Link, createFileRoute } from '@tanstack/react-router';
+import { Link, createFileRoute, redirect, useNavigate } from '@tanstack/react-router';
 import { Hexagon } from 'lucide-react';
+import { useEffect } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { z } from 'zod';
 
@@ -8,9 +9,15 @@ import { PasswordInput } from '@/components/custom/password-input';
 import { Button } from '@/components/ui/button';
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
+import useAuth from '@/contexts/auth/use-auth';
 
 export const Route = createFileRoute('/register')({
   component: Register,
+  beforeLoad: ({ context }) => {
+    if (context.auth.session.isAuthenticated) {
+      throw redirect({ to: '/' });
+    }
+  },
 });
 
 const RegisterSchema = z
@@ -37,8 +44,19 @@ type RegisterSchema = z.infer<typeof RegisterSchema>;
 function Register() {
   const form = useForm<RegisterSchema>({ resolver: zodResolver(RegisterSchema), defaultValues });
 
+  const { register } = useAuth();
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (register.isSuccess) {
+      navigate({ to: '/' });
+    }
+  }, [register.isSuccess, navigate]);
+
   const onSubmit: SubmitHandler<RegisterSchema> = (data) => {
     console.log(data);
+    register.mutate({ name: data.username, email: data.email, password: data.password });
   };
 
   return (

@@ -1,6 +1,7 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Link, createFileRoute } from '@tanstack/react-router';
+import { Link, createFileRoute, redirect, useNavigate } from '@tanstack/react-router';
 import { Hexagon } from 'lucide-react';
+import { useEffect } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { z } from 'zod';
 
@@ -8,9 +9,15 @@ import { PasswordInput } from '@/components/custom/password-input';
 import { Button } from '@/components/ui/button';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
+import useAuth from '@/contexts/auth/use-auth';
 
 export const Route = createFileRoute('/login')({
   component: Login,
+  beforeLoad: ({ context }) => {
+    if (context.auth.session.isAuthenticated) {
+      throw redirect({ to: '/' });
+    }
+  },
 });
 
 const LoginSchema = z.object({
@@ -28,8 +35,19 @@ type LoginSchema = z.infer<typeof LoginSchema>;
 function Login() {
   const form = useForm<LoginSchema>({ resolver: zodResolver(LoginSchema), defaultValues });
 
+  const { login } = useAuth();
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (login.isSuccess) {
+      navigate({ to: '/' });
+    }
+  }, [login.isSuccess, navigate]);
+
   const onSubmit: SubmitHandler<LoginSchema> = (data) => {
     console.log(data);
+    login.mutate(data);
   };
 
   return (
@@ -65,7 +83,7 @@ function Login() {
                       <Link className="ml-auto inline-block text-sm underline">Forgot your password?</Link>
                     </div>
                     <FormControl>
-                      <PasswordInput type="password" {...field} />
+                      <PasswordInput {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>

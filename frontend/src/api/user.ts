@@ -33,7 +33,7 @@ export async function getUser(): Promise<SuccessResponse<User>> {
 }
 
 export async function refreshToken(): Promise<SuccessResponse<{ accessToken: string; userId: string }>> {
-  const response = await axiosInstance.post('http://localhost:3000/api/users/refresh-token');
+  const response = await axiosInstance.post('http://localhost:3000/api/user/refresh-token');
 
   return response.data;
 }
