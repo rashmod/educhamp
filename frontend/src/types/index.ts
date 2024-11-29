@@ -11,3 +11,5 @@ export type ErrorResponse<T> = {
   error: T;
   statusCode: number;
 };
+
+export type User = { _id: string; name: string; email: string; grade: number };

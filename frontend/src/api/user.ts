@@ -1,5 +1,5 @@
 import axiosInstance from '@/lib/setup-axios-interceptor';
-import { SuccessResponse } from '@/types';
+import { SuccessResponse, User } from '@/types';
 
 export async function register(input: {
   name: string;
@@ -32,10 +32,8 @@ export async function getUser(): Promise<SuccessResponse<User>> {
   return response.data;
 }
 
-export async function refreshToken(): Promise<SuccessResponse<{ accessToken: string; userId: string }>> {
+export async function refreshToken(): Promise<SuccessResponse<{ user: User; accessToken: string }>> {
   const response = await axiosInstance.post('http://localhost:3000/api/user/refresh-token');
 
   return response.data;
 }
-
-type User = { _id: string; name: string; email: string; grade: number };

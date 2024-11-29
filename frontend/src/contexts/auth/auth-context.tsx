@@ -2,6 +2,7 @@ import { UseMutationResult } from '@tanstack/react-query';
 import React, { createContext } from 'react';
 
 import { login, logout, register } from '@/api/user';
+import { User } from '@/types';
 
 type AuthContext = {
   register: UseMutationResult<Awaited<ReturnType<typeof register>>, Error, Parameters<typeof register>[0], unknown>;
@@ -10,7 +11,7 @@ type AuthContext = {
   session: {
     isAuthenticated: boolean;
     isLoading: boolean;
-    userId: string | null;
+    user: User | null;
     setAccessToken: React.Dispatch<React.SetStateAction<string | null>>;
   };
 };

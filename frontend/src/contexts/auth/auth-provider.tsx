@@ -6,16 +6,17 @@ import useLogin from '@/hooks/use-login';
 import useLogout from '@/hooks/use-logout';
 import useRefreshToken from '@/hooks/use-refresh-token';
 import useRegister from '@/hooks/use-register';
+import { User } from '@/types';
 
 export default function AuthProvider({ children }: { children: React.ReactNode }) {
   const [refreshingToken, setRefreshingToken] = useState(true);
   const [accessToken, setAccessToken] = useState<string | null>(null);
-  const [userId, setUserId] = useState<string | null>('67419665614314f4845e645b');
+  const [user, setUser] = useState<User | null>(null);
 
-  const register = useRegister({ setAccessToken, setUserId });
-  const login = useLogin({ setAccessToken, setUserId });
+  const register = useRegister({ setAccessToken, setUser });
+  const login = useLogin({ setAccessToken, setUser });
   const logout = useLogout();
-  const { mutate: refreshToken, isPending: refreshTokenLoading } = useRefreshToken({ setAccessToken, setUserId });
+  const { mutate: refreshToken, isPending: refreshTokenLoading } = useRefreshToken({ setAccessToken, setUser });
 
   useEffect(() => {
     refreshToken();
@@ -33,7 +34,7 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
         session: {
           isAuthenticated: Boolean(accessToken),
           isLoading,
-          userId,
+          user,
           setAccessToken,
         },
       }}
