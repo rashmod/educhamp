@@ -1,16 +1,16 @@
 import AuthService from '@/auth/service';
 import ErrorFactory from '@/errors';
-import Repository from '@/user/repository';
+import UserRepository from '@/user/repository';
 
 export default class UserService {
   constructor(
-    private readonly repository: Repository,
+    private readonly userRepository: UserRepository,
     private readonly authService: AuthService
   ) {}
 
   async register({ name, email, password }: { name: string; email: string; password: string }) {
     const hashedPassword = await this.authService.hashPassword(password);
-    const user = await this.repository.create({ name, email, password: hashedPassword });
+    const user = await this.userRepository.create({ name, email, password: hashedPassword });
 
     if (!user) throw ErrorFactory.internalServerError('User not created');
 
@@ -20,7 +20,7 @@ export default class UserService {
   }
 
   async login({ email, password }: { email: string; password: string }) {
-    const user = await this.repository.findByEmail(email);
+    const user = await this.userRepository.findByEmail(email);
 
     if (!user) throw ErrorFactory.notFoundError('User not found');
 
@@ -46,7 +46,7 @@ export default class UserService {
   }
 
   async findById(id: string) {
-    const user = await this.repository.findById(id);
+    const user = await this.userRepository.findById(id);
     if (!user) throw ErrorFactory.notFoundError('User not found');
 
     return user;

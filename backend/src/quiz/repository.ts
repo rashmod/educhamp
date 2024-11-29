@@ -3,7 +3,7 @@ import { Types } from 'mongoose';
 import Question from '@/quiz/schema/question';
 import Quiz, { IQuiz } from '@/quiz/schema/quiz';
 
-export default class Repository {
+export default class QuizRepository {
   async createQuiz({
     userId,
     grade,

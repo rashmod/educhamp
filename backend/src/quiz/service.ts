@@ -3,12 +3,11 @@ import { Types } from 'mongoose';
 import ErrorFactory from '@/errors';
 import calculateBounds from '@/quiz/lib/calculate-bounds';
 import chooseRandom from '@/quiz/lib/choose-random';
-import Repository from '@/quiz/repository';
+import QuizRepository from '@/quiz/repository';
+import { IQuestion } from '@/quiz/schema/question';
 
-import { IQuestion } from './schema/question';
-
-export default class Service {
-  constructor(private readonly repository: Repository) {}
+export default class QuizService {
+  constructor(private readonly quizRepository: QuizRepository) {}
 
   async createQuiz({
     userId,
@@ -21,8 +20,8 @@ export default class Service {
     maxTime: number;
     maxQuestions: number;
   }) {
-    const quiz = await this.repository.createQuiz({ userId, grade, maxTime, maxQuestions });
-    const questions = await this.repository.getQuestions({ grade });
+    const quiz = await this.quizRepository.createQuiz({ userId, grade, maxTime, maxQuestions });
+    const questions = await this.quizRepository.getQuestions({ grade });
     const randomQuestion = chooseRandom(questions);
     await this.addQuestionToQuiz(quiz.id.toString(), randomQuestion.id.toString());
 
@@ -33,7 +32,7 @@ export default class Service {
     const quiz = await this.getQuizById(quizId);
 
     quiz.completed = true;
-    await this.repository.saveQuiz(quiz);
+    await this.quizRepository.saveQuiz(quiz);
   }
 
   async addQuestionToQuiz(quizId: string, questionId: string) {
@@ -43,7 +42,7 @@ export default class Service {
 
     quiz.questions.push({ _id: new Types.ObjectId(questionId) });
     quiz.maxMarks += question.difficulty;
-    await this.repository.saveQuiz(quiz);
+    await this.quizRepository.saveQuiz(quiz);
   }
 
   async submitAnswer({ quizId, questionId, optionId }: { quizId: string; questionId: string; optionId: string }) {
@@ -61,7 +60,7 @@ export default class Service {
     quiz.questions[questionIndex]!.optionId = optionId;
     quiz.marksObtained += isOptionCorrect ? question.difficulty : 0;
 
-    await this.repository.saveQuiz(quiz);
+    await this.quizRepository.saveQuiz(quiz);
   }
 
   async getNextQuestion(quizId: string) {
@@ -74,7 +73,7 @@ export default class Service {
     const delta = 1;
     const { lowerBound, upperBound } = calculateBounds({ difficulty: averageDifficulty, efficiency, delta });
 
-    let possibleQuestions = await this.repository.getQuestions({
+    let possibleQuestions = await this.quizRepository.getQuestions({
       grade,
       lowerBound,
       upperBound,
@@ -82,14 +81,14 @@ export default class Service {
     });
 
     if (possibleQuestions.length === 0) {
-      possibleQuestions = await this.repository.getQuestions({
+      possibleQuestions = await this.quizRepository.getQuestions({
         grade,
         excludedIds: questions.map((question) => question._id.toString()),
       });
     }
 
     if (possibleQuestions.length === 0) {
-      possibleQuestions = await this.repository.getQuestions({ grade });
+      possibleQuestions = await this.quizRepository.getQuestions({ grade });
     }
 
     const randomQuestion = chooseRandom(possibleQuestions);
@@ -103,7 +102,7 @@ export default class Service {
       throw ErrorFactory.notFoundError('Quiz not completed');
     }
 
-    const quizWithQuestions = (await this.repository.getPopulatedQuiz(quizId))!;
+    const quizWithQuestions = (await this.quizRepository.getPopulatedQuiz(quizId))!;
     const report = [];
 
     for (const question of quizWithQuestions.questions) {
@@ -116,7 +115,7 @@ export default class Service {
   }
 
   private async getQuizById(quizId: string) {
-    const quiz = await this.repository.getQuizById(quizId);
+    const quiz = await this.quizRepository.getQuizById(quizId);
     if (!quiz) {
       throw ErrorFactory.notFoundError('Quiz not found');
     }
@@ -124,7 +123,7 @@ export default class Service {
   }
 
   private async getQuestionById(questionId: string) {
-    const question = await this.repository.getQuestionById(questionId);
+    const question = await this.quizRepository.getQuestionById(questionId);
     if (!question) {
       throw ErrorFactory.notFoundError('Question not found');
     }
@@ -132,7 +131,7 @@ export default class Service {
   }
 
   async getUserQuizzes(userId: string) {
-    const quizzes = await this.repository.getUserQuizzes(userId);
+    const quizzes = await this.quizRepository.getUserQuizzes(userId);
 
     const res = [];
 

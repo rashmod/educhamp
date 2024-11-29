@@ -4,17 +4,17 @@ import { Types } from 'mongoose';
 
 import ApiResponse from '@/http/api-response';
 import handleApiResponse from '@/http/handle-api-response';
-import Service from '@/quiz/service';
+import QuizService from '@/quiz/service';
 
-export default class Controller {
-  constructor(private readonly service: Service) {}
+export default class QuizController {
+  constructor(private readonly quizService: QuizService) {}
 
   startQuiz = async (req: express.Request, res: express.Response) => {
     const { userId, grade }: { userId: string; grade: number } = req.body;
     const maxTime = 60 * 20;
     const maxQuestions = 20;
 
-    const quiz = await this.service.createQuiz({ userId, grade, maxTime, maxQuestions });
+    const quiz = await this.quizService.createQuiz({ userId, grade, maxTime, maxQuestions });
 
     const response = ApiResponse.success({
       data: { ...quiz, maxQuestions, maxTime },
@@ -27,9 +27,9 @@ export default class Controller {
   submitAnswer = async (req: express.Request, res: express.Response) => {
     const { quizId, questionId, optionId }: { quizId: string; questionId: string; optionId: string } = req.body;
 
-    await this.service.submitAnswer({ quizId, questionId, optionId });
-    const nextQuestion = await this.service.getNextQuestion(quizId);
-    await this.service.addQuestionToQuiz(quizId, (nextQuestion._id as Types.ObjectId).toString());
+    await this.quizService.submitAnswer({ quizId, questionId, optionId });
+    const nextQuestion = await this.quizService.getNextQuestion(quizId);
+    await this.quizService.addQuestionToQuiz(quizId, (nextQuestion._id as Types.ObjectId).toString());
 
     const response = ApiResponse.success({
       data: nextQuestion,
@@ -42,7 +42,7 @@ export default class Controller {
   endTest = async (req: express.Request, res: express.Response) => {
     const { quizId }: { quizId: string } = req.body;
 
-    await this.service.endQuiz(quizId);
+    await this.quizService.endQuiz(quizId);
 
     const response = ApiResponse.success({
       data: null,
@@ -55,7 +55,7 @@ export default class Controller {
   getReport = async (req: express.Request<{ quizId: string }>, res: express.Response) => {
     const { quizId }: { quizId: string } = req.params;
 
-    const report = await this.service.getReport(quizId);
+    const report = await this.quizService.getReport(quizId);
 
     const response = ApiResponse.success({
       data: report,
@@ -68,7 +68,7 @@ export default class Controller {
   getUserQuizzes = async (req: express.Request<{ userId: string }>, res: express.Response) => {
     const { userId }: { userId: string } = req.params;
 
-    const quizzes = await this.service.getUserQuizzes(userId);
+    const quizzes = await this.quizService.getUserQuizzes(userId);
 
     const response = ApiResponse.success({
       data: quizzes,

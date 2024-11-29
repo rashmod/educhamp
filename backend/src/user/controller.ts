@@ -7,7 +7,7 @@ import ApiResponse from '@/http/api-response';
 import handleApiResponse from '@/http/handle-api-response';
 import UserService from '@/user/service';
 
-export default class Controller {
+export default class UserController {
   constructor(
     private readonly userService: UserService,
     private readonly authService: AuthService

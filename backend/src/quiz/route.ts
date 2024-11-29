@@ -1,24 +1,24 @@
 import express from 'express';
 
 import asyncHandler from '@/lib/async-handler';
-import Controller from '@/quiz/controller';
-import Repository from '@/quiz/repository';
-import Service from '@/quiz/service';
+import QuizController from '@/quiz/controller';
+import QuizRepository from '@/quiz/repository';
+import QuizService from '@/quiz/service';
 
 const router = express.Router();
 
-const repository = new Repository();
-const service = new Service(repository);
-const controller = new Controller(service);
+const quizRepository = new QuizRepository();
+const quizService = new QuizService(quizRepository);
+const quizController = new QuizController(quizService);
 
-router.post('/start', asyncHandler(controller.startQuiz));
+router.post('/start', asyncHandler(quizController.startQuiz));
 
-router.post('/submit-answer', asyncHandler(controller.submitAnswer));
+router.post('/submit-answer', asyncHandler(quizController.submitAnswer));
 
-router.post('/end', asyncHandler(controller.endTest));
+router.post('/end', asyncHandler(quizController.endTest));
 
-router.get('/user/:userId', asyncHandler(controller.getUserQuizzes));
+router.get('/user/:userId', asyncHandler(quizController.getUserQuizzes));
 
-router.get('/:quizId/report', asyncHandler(controller.getReport));
+router.get('/:quizId/report', asyncHandler(quizController.getReport));
 
 export default router;

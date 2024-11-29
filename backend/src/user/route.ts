@@ -2,20 +2,20 @@ import express from 'express';
 
 import AuthService from '@/auth/service';
 import asyncHandler from '@/lib/async-handler';
-import Controller from '@/user/controller';
+import UserController from '@/user/controller';
 import Repository from '@/user/repository';
 import UserService from '@/user/service';
 
 const router = express.Router();
 
 const authService = new AuthService();
-const repository = new Repository();
-const service = new UserService(repository, authService);
-const controller = new Controller(service, authService);
+const userRepository = new Repository();
+const userService = new UserService(userRepository, authService);
+const userController = new UserController(userService, authService);
 
-router.post('/register', asyncHandler(controller.register));
-router.post('/login', asyncHandler(controller.login));
-router.post('/logout', asyncHandler(controller.logout));
-router.post('/refresh-token', asyncHandler(controller.refreshToken));
+router.post('/register', asyncHandler(userController.register));
+router.post('/login', asyncHandler(userController.login));
+router.post('/logout', asyncHandler(userController.logout));
+router.post('/refresh-token', asyncHandler(userController.refreshToken));
 
 export default router;

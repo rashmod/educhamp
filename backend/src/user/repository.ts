@@ -1,6 +1,6 @@
 import User from './schema';
 
-export default class Respository {
+export default class UserRespository {
   async create({ name, email, password }: { name: string; email: string; password: string }) {
     return User.create({ name, email, password });
   }
