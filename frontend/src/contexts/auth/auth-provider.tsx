@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 
+import Loading from '@/components/custom/loading';
 import AuthContext from '@/contexts/auth/auth-context';
 import useLogin from '@/hooks/use-login';
 import useLogout from '@/hooks/use-logout';
@@ -21,6 +22,8 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
     setRefreshingToken(false);
   }, [refreshToken]);
 
+  const isLoading = refreshTokenLoading || refreshingToken;
+
   return (
     <AuthContext.Provider
       value={{
@@ -29,13 +32,19 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
         logout,
         session: {
           isAuthenticated: Boolean(accessToken),
-          isLoading: refreshTokenLoading || refreshingToken,
+          isLoading,
           userId,
           setAccessToken,
         },
       }}
     >
-      {children}
+      {isLoading ? (
+        <div className="grid h-screen place-items-center bg-primary text-9xl text-primary-foreground">
+          <Loading />
+        </div>
+      ) : (
+        children
+      )}
     </AuthContext.Provider>
   );
 }
