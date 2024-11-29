@@ -5,7 +5,7 @@ export async function register(input: {
   name: string;
   email: string;
   password: string;
-}): Promise<SuccessResponse<{ user: User; acccessToken: string }>> {
+}): Promise<SuccessResponse<{ user: User; accessToken: string }>> {
   const response = await axiosInstance.post('http://localhost:3000/api/user/register', input);
 
   return response.data;

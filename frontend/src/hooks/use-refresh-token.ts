@@ -1,8 +1,8 @@
 import { useMutation } from '@tanstack/react-query';
 
-import { login } from '@/api/user';
+import { refreshToken } from '@/api/user';
 
-export default function useLogin({
+export default function useRefreshToken({
   setAccessToken,
   setUserId,
 }: {
@@ -10,10 +10,10 @@ export default function useLogin({
   setUserId: React.Dispatch<React.SetStateAction<string | null>>;
 }) {
   return useMutation({
-    mutationFn: login,
+    mutationFn: refreshToken,
     onSuccess: ({ data }) => {
       setAccessToken(data.accessToken);
-      setUserId(data.user._id);
+      setUserId(data.userId);
     },
   });
 }
