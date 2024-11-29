@@ -1,11 +1,8 @@
 import express from 'express';
-import { StatusCodes } from 'http-status-codes';
 import passport from 'passport';
 
 import AuthService from '@/auth/service';
 import env from '@/config/env';
-import ApiResponse from '@/http/api-response';
-import handleApiResponse from '@/http/handle-api-response';
 import asyncHandler from '@/lib/async-handler';
 import UserController from '@/user/controller';
 import Repository from '@/user/repository';
