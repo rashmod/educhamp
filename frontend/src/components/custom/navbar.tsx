@@ -1,6 +1,8 @@
 import { Link } from '@tanstack/react-router';
 import { Hexagon } from 'lucide-react';
 
+import LoggedIn from '@/components/custom/logged-in';
+import LoggedOut from '@/components/custom/logged-out';
 import { Button } from '@/components/ui/button';
 
 export default function Navbar() {
@@ -17,21 +19,25 @@ export default function Navbar() {
         </header>
 
         <div className="ml-auto flex gap-2 p-2 pr-0">
-          <Link to="/" className="[&.active>*]:font-bold">
-            <Button variant="link" size="sm">
-              Home
-            </Button>
-          </Link>
-          <Link to="/login" className="[&.active>*]:font-bold">
-            <Button variant="link" size="sm">
-              Login
-            </Button>
-          </Link>
-          <Link to="/register" className="[&.active>*]:font-bold">
-            <Button variant="link" size="sm">
-              Register
-            </Button>
-          </Link>
+          <LoggedIn>
+            <Link to="/" className="[&.active>*]:font-bold">
+              <Button variant="link" size="sm">
+                Home
+              </Button>
+            </Link>
+          </LoggedIn>
+          <LoggedOut>
+            <Link to="/login" className="[&.active>*]:font-bold">
+              <Button variant="link" size="sm">
+                Login
+              </Button>
+            </Link>
+            <Link to="/register" className="[&.active>*]:font-bold">
+              <Button variant="link" size="sm">
+                Register
+              </Button>
+            </Link>
+          </LoggedOut>
         </div>
       </div>
     </div>
