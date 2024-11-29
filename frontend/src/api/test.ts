@@ -1,12 +1,15 @@
 import axios from 'axios';
 
+import env from '@/config/env';
 import { SuccessResponse } from '@/types';
+
+const API_URL = env.VITE_BACKEND_API_URL;
 
 export async function startTestApi(
   userId: string,
   grade: number
 ): Promise<SuccessResponse<{ quizId: string; maxTime: number; maxQuestions: number; question: Question }>> {
-  const response = await axios.post('http://localhost:3000/api/quiz/start', {
+  const response = await axios.post(API_URL + '/quiz/start', {
     userId,
     grade,
   });
@@ -19,7 +22,7 @@ export async function submitAnswerApi(
   questionId: string,
   optionId: string
 ): Promise<SuccessResponse<Question>> {
-  const response = await axios.post('http://localhost:3000/api/quiz/submit-answer', {
+  const response = await axios.post(API_URL + '/quiz/submit-answer', {
     quizId: testId,
     questionId,
     optionId,
@@ -29,7 +32,7 @@ export async function submitAnswerApi(
 }
 
 export async function endTestApi(testId: string): Promise<SuccessResponse<null>> {
-  const response = await axios.post('http://localhost:3000/api/quiz/end', {
+  const response = await axios.post(API_URL + '/quiz/end', {
     quizId: testId,
   });
 
@@ -37,13 +40,13 @@ export async function endTestApi(testId: string): Promise<SuccessResponse<null>>
 }
 
 export async function getReportApi(testId: string): Promise<SuccessResponse<QuizWithQuestions>> {
-  const response = await axios.get(`http://localhost:3000/api/quiz/${testId}/report`);
+  const response = await axios.get(`${API_URL}/quiz/${testId}/report`);
 
   return response.data;
 }
 
 export async function getUserTestsApi(userId: string): Promise<SuccessResponse<QuizSummary[]>> {
-  const response = await axios.get(`http://localhost:3000/api/quiz/user/${userId}`);
+  const response = await axios.get(`${API_URL}/quiz/user/${userId}`);
 
   return response.data;
 }
