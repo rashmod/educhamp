@@ -12,6 +12,8 @@ const schema = z.object({
   JWT_REFRESH_SECRET: z.string().trim().min(1),
   JWT_ACCESS_SECRET: z.string().trim().min(1),
   CLIENT_URL: z.string().trim().min(1),
+  GOOGLE_CLIENT_ID: z.string().trim().min(1),
+  GOOGLE_CLIENT_SECRET: z.string().trim().min(1),
 });
 
 const parsedEnv = schema.safeParse(process.env);

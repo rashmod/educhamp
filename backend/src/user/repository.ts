@@ -12,4 +12,8 @@ export default class UserRespository {
   async findById(id: string) {
     return User.findById(id);
   }
+
+  async findByGoogleId(googleId: string) {
+    return User.findOne({ googleId });
+  }
 }

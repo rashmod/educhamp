@@ -2,6 +2,7 @@ import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import express from 'express';
 
+import '@/auth/google-strategy';
 import env from '@/config/env';
 import connectDB from '@/db';
 import errorHandler from '@/middlewares/error-handler';

@@ -20,9 +20,9 @@ export default class UserService {
   }
 
   async login({ email, password }: { email: string; password: string }) {
-    const user = await this.userRepository.findByEmail(email);
+    const user = await this.findByEmail(email);
 
-    if (!user) throw ErrorFactory.notFoundError('User not found');
+    if (!user.password) throw ErrorFactory.notFoundError('User not found');
 
     const isValidPassword = await this.authService.verifyPassword(password, user.password);
 
@@ -45,8 +45,22 @@ export default class UserService {
     return { accessToken, refreshToken, user };
   }
 
+  async findByEmail(email: string) {
+    const user = await this.userRepository.findByEmail(email);
+    if (!user) throw ErrorFactory.notFoundError('User not found');
+
+    return user;
+  }
+
   async findById(id: string) {
     const user = await this.userRepository.findById(id);
+    if (!user) throw ErrorFactory.notFoundError('User not found');
+
+    return user;
+  }
+
+  async findByGoogleId(googleId: string) {
+    const user = await this.userRepository.findByGoogleId(googleId);
     if (!user) throw ErrorFactory.notFoundError('User not found');
 
     return user;
