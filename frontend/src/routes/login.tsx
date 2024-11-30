@@ -36,15 +36,18 @@ type LoginSchema = z.infer<typeof LoginSchema>;
 function Login() {
   const form = useForm<LoginSchema>({ resolver: zodResolver(LoginSchema), defaultValues });
 
-  const { login } = useAuth();
+  const {
+    login,
+    session: { user },
+  } = useAuth();
 
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (login.isSuccess) {
+    if (login.isSuccess || user) {
       navigate({ to: '/' });
     }
-  }, [login.isSuccess, navigate]);
+  }, [login.isSuccess, navigate, user]);
 
   const onSubmit: SubmitHandler<LoginSchema> = (data) => {
     console.log(data);
