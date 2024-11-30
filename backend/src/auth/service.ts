@@ -35,6 +35,7 @@ export default class AuthService {
       secure: env.NODE_ENV === 'production',
       path: '/api/user/refresh-token',
       maxAge: expires === 'now' ? 0 : 7 * 24 * 60 * 60 * 1000,
+      sameSite: 'none',
     };
 
     res.cookie('refreshToken', refreshToken, cookieOptions);
