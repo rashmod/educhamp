@@ -32,7 +32,7 @@ router.get(
     url.set('accessToken', accessToken);
     url.set('name', user.name);
     url.set('email', user.email);
-    url.set('token', accessToken);
+    url.set('_id', user._id);
 
     authService.setRefreshCookie(res, refreshToken, 'default');
     res.redirect(`${env.CLIENT_URL}/google?${url.toString()}`);
