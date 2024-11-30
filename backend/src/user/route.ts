@@ -24,12 +24,18 @@ router.get('/google', passport.authenticate('google', { scope: ['profile', 'emai
 router.get(
   '/google/callback',
   passport.authenticate('google', { session: false, failureRedirect: '/login' }),
-  (req, res) => {
-    const user = req.user as { _id: string; email: string };
-    const { refreshToken } = authService.generateTokens({ _id: user._id, email: user.email });
+  async (req, res) => {
+    const user = req.user as { _id: string; email: string; name: string };
+    const { refreshToken, accessToken } = authService.generateTokens({ _id: user._id, email: user.email });
+
+    const url = new URLSearchParams();
+    url.set('accessToken', accessToken);
+    url.set('name', user.name);
+    url.set('email', user.email);
+    url.set('token', accessToken);
 
     authService.setRefreshCookie(res, refreshToken, 'default');
-    res.redirect(env.CLIENT_URL);
+    res.redirect(`${env.CLIENT_URL}/google?${url.toString()}`);
   }
 );
 
